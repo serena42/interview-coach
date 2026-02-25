@@ -1,0 +1,102 @@
+[
+  {
+    "id": "Q001",
+    "question": "Tell me about a time you had to influence someone over whom you had no authority.",
+    "competency": "Leadership"
+  },
+  {
+    "id": "Q002",
+    "question": "Describe a situation where you disagreed with a team decision. What did you do?",
+    "competency": "Collaboration"
+  },
+  {
+    "id": "Q003",
+    "question": "Give an example of a time you failed. What did you learn?",
+    "competency": "Resilience"
+  },
+  {
+    "id": "Q004",
+    "question": "Tell me about a time you had to make a decision with incomplete information.",
+    "competency": "Judgment"
+  },
+  {
+    "id": "Q005",
+    "question": "Describe a time when you had to deliver results under a tight deadline.",
+    "competency": "Execution"
+  },
+  {
+    "id": "Q006",
+    "question": "Tell me about a time you took a calculated risk. What was the outcome?",
+    "competency": "Risk-Taking"
+  },
+  {
+    "id": "Q007",
+    "question": "Give an example of a time you improved a process or system.",
+    "competency": "Innovation"
+  },
+  {
+    "id": "Q008",
+    "question": "Describe a time you had to learn something quickly to complete a task.",
+    "competency": "Learning Agility"
+  },
+  {
+    "id": "Q009",
+    "question": "Tell me about a time you received critical feedback. How did you respond?",
+    "competency": "Self-Awareness"
+  },
+  {
+    "id": "Q010",
+    "question": "Describe a time when you had to work with someone difficult. How did you handle it?",
+    "competency": "Interpersonal Skills"
+  },
+  {
+    "id": "Q011",
+    "question": "Tell me about a time you went above and beyond your job responsibilities.",
+    "competency": "Ownership"
+  },
+  {
+    "id": "Q012",
+    "question": "Give an example of a time you had to prioritize multiple tasks. How did you decide?",
+    "competency": "Time Management"
+  },
+  {
+    "id": "Q013",
+    "question": "Describe a time when you had to make a trade-off between speed and quality.",
+    "competency": "Decision-Making"
+  },
+  {
+    "id": "Q014",
+    "question": "Tell me about a time you challenged the status quo.",
+    "competency": "Bias for Action"
+  },
+  {
+    "id": "Q015",
+    "question": "Describe a time when you had to explain a complex topic to a non-technical audience.",
+    "competency": "Communication"
+  },
+  {
+    "id": "Q016",
+    "question": "Tell me about a time you had to earn trust quickly.",
+    "competency": "Trust & Credibility"
+  },
+  {
+    "id": "Q017",
+    "question": "Give an example of a time you made a mistake and how you handled it.",
+    "competency": "Accountability"
+  },
+  {
+    "id": "Q018",
+    "question": "Describe a time when you had to adapt to a major change at work.",
+    "competency": "Adaptability"
+  },
+  {
+    "id": "Q019",
+    "question": "Tell me about a time you mentored or coached someone.",
+    "competency": "People Development"
+  },
+  {
+    "id": "Q020",
+    "question": "Give an example of a time you identified a customer need and how you addressed it.",
+    "competency": "Customer Obsession"
+  }
+]

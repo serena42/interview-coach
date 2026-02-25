@@ -1,0 +1,38 @@
+﻿@page "/statements"
+@rendermode InteractiveServer
+@inject InterviewService InterviewService
+@using MiniProject_Take1.Services
+@using MiniProject_Take1.Domain.Interview
+
+<h3>My Statements</h3>
+
+@if (_responses.Count == 0)
+{
+    <p>No saved responses yet. Go to STAR Practice to add some.</p>
+}
+else
+{
+    @foreach (var r in _responses)
+    {
+        if (r is StarResponse star)
+        {
+            <div style="border:1px solid #ccc; margin:10px; padding:10px;">
+                <h5>@star.QuestionId</h5>
+                <p><strong>Situation:</strong> @star.Situation</p>
+                <p><strong>Task:</strong> @star.Task</p>
+                <p><strong>Action:</strong> @star.Action</p>
+                <p><strong>Result:</strong> @star.Result</p>
+                <p><em>Last Edited: @star.LastEdited</em></p>
+            </div>
+        }
+    }
+}
+
+@code {
+    private List<InterviewResponse> _responses = new();
+
+    protected override void OnInitialized()
+    {
+        _responses = InterviewService.GetAllResponses();
+    }
+}

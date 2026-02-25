@@ -1,0 +1,62 @@
+﻿@page "/star"
+@rendermode InteractiveServer
+@inject InterviewService InterviewService
+@using MiniProject_Take1.Services
+@using MiniProject_Take1.Domain.Interview
+@inject InterviewService InterviewService
+@using MiniProject_Take1.Services
+@using MiniProject_Take1.Domain.Interview
+
+<h3>STAR Practice</h3>
+
+@if (_currentQuestion != null)
+{
+    <div>
+        <h5>@_currentQuestion.Question</h5>
+        <p><em>Competency: @_currentQuestion.Competency</em></p>
+
+        <label>Situation</label>
+        <textarea @bind="_response.Situation" rows="3" style="width:100%"></textarea>
+
+        <label>Task</label>
+        <textarea @bind="_response.Task" rows="3" style="width:100%"></textarea>
+
+        <label>Action</label>
+        <textarea @bind="_response.Action" rows="3" style="width:100%"></textarea>
+
+        <label>Result</label>
+        <textarea @bind="_response.Result" rows="3" style="width:100%"></textarea>
+
+        <button @onclick="SaveResponse">Save</button>
+        <button @onclick="NextQuestion">Next Question</button>
+    </div>
+}
+
+@code {
+    private List<InterviewQuestion> _questions = new();
+    private InterviewQuestion _currentQuestion;
+    private StarResponse _response = new();
+    private int _currentIndex = 0;
+
+    protected override void OnInitialized()
+    {
+        _questions = InterviewService.GetAllQuestions();
+        if (_questions.Count > 0)
+            _currentQuestion = _questions[_currentIndex];
+    }
+
+    private void NextQuestion()
+    {
+        _currentIndex = (_currentIndex + 1) % _questions.Count;
+        _currentQuestion = _questions[_currentIndex];
+        _response = new StarResponse();
+    }
+
+    private void SaveResponse()
+    {
+        _response.QuestionId = _currentQuestion.Id;
+        _response.QuestionType = _currentQuestion.QuestionType;
+        InterviewService.SaveResponse(_response);
+        _response = new StarResponse();
+    }
+}

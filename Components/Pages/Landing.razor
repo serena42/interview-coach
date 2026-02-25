@@ -1,0 +1,48 @@
+﻿@page "/"
+@rendermode InteractiveServer
+@inject SessionService SessionService
+@inject NavigationManager Navigation
+@using MiniProject_Take1.Services
+
+<div style="max-width:500px; margin:100px auto; text-align:center;">
+    <h2>Interview Coach</h2>
+    <p>Practice and track your interview preparation.</p>
+
+    <div style="margin-top:40px;">
+        <button @onclick="NewSession">New Session</button>
+        <p style="margin:20px 0;">or</p>
+        <label>Load Previous Session</label>
+        <InputFile OnChange="LoadSession" accept=".json" />
+    </div>
+
+    @if (!string.IsNullOrEmpty(_error))
+    {
+        <p style="color:red;">@_error</p>
+    }
+</div>
+
+@code {
+    private string _error;
+
+    private void NewSession()
+    {
+        Navigation.NavigateTo("/star");
+    }
+
+    private async Task LoadSession(InputFileChangeEventArgs e)
+    {
+        try
+        {
+            var file = e.File;
+            using var stream = file.OpenReadStream();
+            using var reader = new StreamReader(stream);
+            var json = await reader.ReadToEndAsync();
+            SessionService.ImportSession(json);
+            Navigation.NavigateTo("/star");
+        }
+        catch (Exception ex)
+        {
+            _error = $"Failed to load session: {ex.Message}";
+        }
+    }
+}

@@ -1,6 +1,7 @@
-﻿using System.Text.Json;
-using MiniProject_Take1.Domain.Interview;
+﻿using MiniProject_Take1.Domain.Interview;
 using MiniProject_Take1.Domain.User;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace MiniProject_Take1.Services
 {
@@ -23,7 +24,8 @@ namespace MiniProject_Take1.Services
             var options = new JsonSerializerOptions
             {
                 PropertyNameCaseInsensitive = true,
-                WriteIndented = true
+                WriteIndented = true,
+                Converters = { new JsonStringEnumConverter() }
             };
 
             return JsonSerializer.Serialize(CurrentSession, options);
@@ -33,7 +35,9 @@ namespace MiniProject_Take1.Services
         {
             var options = new JsonSerializerOptions
             {
-                PropertyNameCaseInsensitive = true
+                PropertyNameCaseInsensitive = true,
+                WriteIndented = true,
+                Converters = { new JsonStringEnumConverter() }
             };
 
             var session = JsonSerializer.Deserialize<SessionData>(json, options);

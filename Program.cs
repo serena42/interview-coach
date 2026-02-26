@@ -15,6 +15,7 @@ namespace MiniProject_Take1
                 .AddInteractiveServerComponents();
             builder.Services.AddSingleton<InterviewService>();
             builder.Services.AddSingleton<SessionService>();
+            builder.Services.AddSingleton<RubricService>();
 
             // add this block after building the app
             var app = builder.Build();

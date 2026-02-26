@@ -5,13 +5,13 @@ namespace MiniProject_Take1.Domain.Interview
     public class StarResponse : InterviewResponse
     {
         public string Situation { get; set; }
-        public string Task { get; set; }
-        public string Action { get; set; }
-        public string Result { get; set; }
-        public int SituationScore { get; set; }  // 1-5
-        public int TaskScore { get; set; }
-        public int ActionScore { get; set; }
-        public int ResultScore { get; set; }
-        public int OverallScore => (SituationScore + TaskScore + ActionScore + ResultScore) / 4;
+        public string? Task { get; set; }
+        public string? Action { get; set; }
+        public string? Result { get; set; }
+        public float SituationScore { get; set; }
+        public float TaskScore { get; set; }
+        public float ActionScore { get; set; }
+        public float ResultScore { get; set; }
+        public float OverallScore => (SituationScore + TaskScore + ActionScore + ResultScore) / 4;
     }
 }

@@ -1,48 +1,104 @@
 ﻿@page "/star"
 @rendermode InteractiveServer
 @inject InterviewService InterviewService
-@using MiniProject_Take1.Services
-@using MiniProject_Take1.Domain.Interview
-@inject InterviewService InterviewService
+@inject RubricService RubricService
 @using MiniProject_Take1.Services
 @using MiniProject_Take1.Domain.Interview
 
-<h3>STAR Practice</h3>
-
-@if (_currentQuestion != null)
+@if (_step == 1)
 {
-    <div>
-        <h5>@_currentQuestion.Question</h5>
-        <p><em>Competency: @_currentQuestion.Competency</em></p>
+    <h3>STAR Practice</h3>
+    <h5>@_currentQuestion?.Question</h5>
+    <p><em>Competency: @_currentQuestion?.Competency</em></p>
 
-        <label>Situation</label>
+    <div style="margin-bottom:10px;">
+        <label><strong>Situation</strong></label>
         <textarea @bind="_response.Situation" rows="3" style="width:100%"></textarea>
-
-        <label>Task</label>
-        <textarea @bind="_response.Task" rows="3" style="width:100%"></textarea>
-
-        <label>Action</label>
-        <textarea @bind="_response.Action" rows="3" style="width:100%"></textarea>
-
-        <label>Result</label>
-        <textarea @bind="_response.Result" rows="3" style="width:100%"></textarea>
-
-        <button @onclick="SaveResponse">Save</button>
-        <button @onclick="NextQuestion">Next Question</button>
     </div>
+    <div style="margin-bottom:10px;">
+        <label><strong>Task</strong></label>
+        <textarea @bind="_response.Task" rows="3" style="width:100%"></textarea>
+    </div>
+    <div style="margin-bottom:10px;">
+        <label><strong>Action</strong></label>
+        <textarea @bind="_response.Action" rows="3" style="width:100%"></textarea>
+    </div>
+    <div style="margin-bottom:10px;">
+        <label><strong>Result</strong></label>
+        <textarea @bind="_response.Result" rows="3" style="width:100%"></textarea>
+    </div>
+
+    <button @onclick="GoToReview">Review & Score</button>
+    <button @onclick="NextQuestion" style="margin-left:10px;">Skip</button>
+}
+else if (_step == 2)
+{
+    <h3>Review & Score</h3>
+    <h5>@_currentQuestion?.Question</h5>
+
+    @foreach (var rubric in _rubrics)
+    {
+        var rubricSection = rubric.Section;
+        var text = GetSectionText(rubricSection);
+        var score = GetSectionScore(rubricSection);
+
+        <div style="border:1px solid #ccc; margin:10px 0; padding:10px;">
+            <h5>@rubricSection</h5>
+            <p><em>@rubric.Guidance</em></p>
+            <p>@rubric.GuidanceDetail</p>
+            <p><strong>Your answer:</strong> @text</p>
+
+            <label>Your Score: @GetSectionScore(rubricSection)/10</label>
+            <input type="range" min="1" max="10" step="0.5"
+                   value="@GetSectionScore(rubricSection)"
+                   @onchange="e => OnScoreChange(e, rubricSection)"
+                   style="width:100%;" />
+        </div>
+    }
+
+    <button @onclick="() => _step = 1">Edit Response</button>
+    <button @onclick="SaveAndNext" style="margin-left:10px;">Save & Next</button>
 }
 
 @code {
     private List<InterviewQuestion> _questions = new();
-    private InterviewQuestion _currentQuestion;
+    private List<StarRubric> _rubrics = new();
+    private InterviewQuestion? _currentQuestion;
     private StarResponse _response = new();
     private int _currentIndex = 0;
+    private int _step = 1;
+
+    private void OnScoreChange(ChangeEventArgs e, string rubricSection)
+    {
+        var val = e.Value?.ToString();
+        if (float.TryParse(val, out float score))
+            SetSectionScore(rubricSection, score);
+    }
 
     protected override void OnInitialized()
     {
         _questions = InterviewService.GetAllQuestions();
+        _rubrics = RubricService.GetStarRubric();
         if (_questions.Count > 0)
             _currentQuestion = _questions[_currentIndex];
+    }
+
+    private void GoToReview()
+    {
+        if (string.IsNullOrWhiteSpace(_response.Situation) &&
+            string.IsNullOrWhiteSpace(_response.Task) &&
+            string.IsNullOrWhiteSpace(_response.Action) &&
+            string.IsNullOrWhiteSpace(_response.Result))
+            return;
+        _step = 2;
+    }
+
+    private void SaveAndNext()
+    {
+        _response.QuestionId = _currentQuestion!.Id;
+        _response.QuestionType = _currentQuestion.QuestionType;
+        InterviewService.SaveResponse(_response);
+        NextQuestion();
     }
 
     private void NextQuestion()
@@ -50,13 +106,35 @@
         _currentIndex = (_currentIndex + 1) % _questions.Count;
         _currentQuestion = _questions[_currentIndex];
         _response = new StarResponse();
+        _step = 1;
     }
 
-    private void SaveResponse()
+    private string GetSectionText(string rubricSection) => rubricSection switch
     {
-        _response.QuestionId = _currentQuestion.Id;
-        _response.QuestionType = _currentQuestion.QuestionType;
-        InterviewService.SaveResponse(_response);
-        _response = new StarResponse();
+        "Situation" => _response.Situation ?? "",
+        "Task" => _response.Task ?? "",
+        "Action" => _response.Action ?? "",
+        "Result" => _response.Result ?? "",
+        _ => ""
+    };
+
+    private float GetSectionScore(string rubricSection) => rubricSection switch
+    {
+        "Situation" => _response.SituationScore,
+        "Task" => _response.TaskScore,
+        "Action" => _response.ActionScore,
+        "Result" => _response.ResultScore,
+        _ => 0
+    };
+
+    private void SetSectionScore(string rubricSection, float score)
+    {
+        switch (rubricSection)
+        {
+            case "Situation": _response.SituationScore = score; break;
+            case "Task": _response.TaskScore = score; break;
+            case "Action": _response.ActionScore = score; break;
+            case "Result": _response.ResultScore = score; break;
+        }
     }
 }

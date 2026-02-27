@@ -26,7 +26,7 @@
 
     private void NewSession()
     {
-        Navigation.NavigateTo("/star");
+        Navigation.NavigateTo("/dashboard");
     }
 
     private async Task LoadSession(InputFileChangeEventArgs e)
@@ -38,7 +38,7 @@
             using var reader = new StreamReader(stream);
             var json = await reader.ReadToEndAsync();
             SessionService.ImportSession(json);
-            Navigation.NavigateTo("/star");
+            Navigation.NavigateTo("/dashboard");
         }
         catch (Exception ex)
         {

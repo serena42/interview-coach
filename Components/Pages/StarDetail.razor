@@ -1,0 +1,127 @@
+﻿@page "/star/{Id}"
+@rendermode InteractiveServer
+@inject InterviewService InterviewService
+@inject RubricService RubricService
+@inject NavigationManager Navigation
+@using MiniProject_Take1.Services
+@using MiniProject_Take1.Domain.Interview
+
+@if (_response == null)
+{
+    <p>Response not found.</p>
+}
+else
+{
+    <h3>@_question?.Question</h3>
+    <p><em>Competency: @_question?.Competency</em></p>
+
+    @foreach (var rubric in _rubrics)
+    {
+        var rubricSection = rubric.Section;
+        var text = GetSectionText(rubricSection);
+        var score = GetSectionScore(rubricSection);
+
+        <div style="border:1px solid #ccc; margin:10px 0; padding:10px;">
+            <h5>@rubricSection</h5>
+            <p><em>@rubric.Guidance</em></p>
+            <p>@rubric.GuidanceDetail</p><textarea value="@text"
+                                                   @onchange="e => SetSectionText(rubricSection, e.Value?.ToString())"
+                                                   rows="3" style="width:100%"></textarea>
+            <label>Your Score: @score/10</label>
+            <input type="range" min="1" max="10" step="0.5"
+                   value="@score"
+                   @onchange="e => OnScoreChange(e, rubricSection)"
+                   style="width:100%;" />
+        </div>
+    }
+    <button @onclick="Save">Save Changes</button>
+    <button @onclick="Demote" style="margin-left:10px; color:red;">Demote</button>
+    <button @onclick="GoBack" style="margin-left:10px;">Back</button>
+}
+
+@code {
+
+    [Parameter] public string Id { get; set; }
+
+    private StarResponse? _response;
+    private InterviewQuestion? _question;
+    private List<StarRubric> _rubrics = new();
+
+    private void GoBack() => Navigation.NavigateTo("/statements");
+    private void SetSectionText(string rubricSection, string value)
+    {
+        if (_response == null) return;
+        value = value ?? "";
+        switch (rubricSection)
+        {
+            case "Situation": _response.Situation = value; break;
+            case "Task": _response.Task = value; break;
+            case "Action": _response.Action = value; break;
+            case "Result": _response.Result = value; break;
+        }
+    }
+
+    protected override void OnInitialized()
+    {
+        _rubrics = RubricService.GetStarRubric();
+        var all = InterviewService.GetAllResponses();
+        var match = all.FirstOrDefault(r => r.Id == Id);
+        if (match is StarResponse star)
+        {
+            _response = star;
+            _question = InterviewService.GetAllQuestions()
+                .FirstOrDefault(q => q.Id == star.QuestionId);
+        }
+    }
+
+    private string GetSectionText(string rubricSection) => rubricSection switch
+    {
+        "Situation" => _response?.Situation ?? "",
+        "Task" => _response?.Task ?? "",
+        "Action" => _response?.Action ?? "",
+        "Result" => _response?.Result ?? "",
+        _ => ""
+    };
+
+    private float GetSectionScore(string rubricSection) => rubricSection switch
+    {
+        "Situation" => _response?.SituationScore ?? 0,
+        "Task" => _response?.TaskScore ?? 0,
+        "Action" => _response?.ActionScore ?? 0,
+        "Result" => _response?.ResultScore ?? 0,
+        _ => 0
+    };
+
+    private void OnScoreChange(ChangeEventArgs e, string rubricSection)
+    {
+        if (_response == null) return;
+        if (float.TryParse(e.Value?.ToString(), out float score))
+        {
+            switch (rubricSection)
+            {
+                case "Situation": _response.SituationScore = score; break;
+                case "Task": _response.TaskScore = score; break;
+                case "Action": _response.ActionScore = score; break;
+                case "Result": _response.ResultScore = score; break;
+            }
+        }
+    }
+
+    private void Save()
+    {
+        if (_response != null)
+            _response.LastEdited = DateTime.UtcNow;
+        Navigation.NavigateTo("/statements");
+    }
+    private void Demote()
+    {
+        if (_response == null) return;
+        if (_response.Status == ItemStatus.Mastered) _response.Status = ItemStatus.Solid;
+        else if (_response.Status == ItemStatus.Solid) _response.Status = ItemStatus.Wip;
+        else if (_response.Status == ItemStatus.Wip) _response.Status = ItemStatus.Todo;
+        InterviewService.UpdateResponse(_response);
+        Navigation.NavigateTo("/statements");
+    }
+
+    private string GetBindableText(string rubricSection) => GetSectionText(rubricSection);
+}

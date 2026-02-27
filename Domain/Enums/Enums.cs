@@ -48,4 +48,13 @@
         Indeed,
         Other
     }
+
+    public enum ItemStatus
+    {
+        Todo,
+        Wip,
+        Solid, 
+        Mastered
+    }
+
 }

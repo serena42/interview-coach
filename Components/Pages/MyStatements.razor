@@ -1,6 +1,7 @@
 ﻿@page "/statements"
 @rendermode InteractiveServer
 @inject InterviewService InterviewService
+@inject NavigationManager Navigation
 @using MiniProject_Take1.Services
 @using MiniProject_Take1.Domain.Interview
 
@@ -8,31 +9,58 @@
 
 @if (_responses.Count == 0)
 {
-    <p>No saved responses yet. Go to STAR Practice to add some.</p>
+    <p>No saved responses yet. Go to <a href="/star">STAR Practice</a> to add some.</p>
 }
 else
 {
-    @foreach (var r in _responses)
-    {
-        if (r is StarResponse star)
-        {
-            <div style="border:1px solid #ccc; margin:10px; padding:10px;">
-                <h5>@star.QuestionId</h5>
-                <p><strong>Situation:</strong> @star.Situation</p>
-                <p><strong>Task:</strong> @star.Task</p>
-                <p><strong>Action:</strong> @star.Action</p>
-                <p><strong>Result:</strong> @star.Result</p>
-                <p><em>Last Edited: @star.LastEdited</em></p>
-            </div>
-        }
-    }
+    <table style="width:100%; border-collapse:collapse;">
+        <thead>
+            <tr style="border-bottom:2px solid #ccc; text-align:left;">
+                <th style="padding:8px;">Question</th>
+                <th style="padding:8px;">Type</th>
+                <th style="padding:8px;">Score</th>
+                <th style="padding:8px;">Last Edited</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var r in _responses)
+            {
+                <tr style="border-bottom:1px solid #eee; cursor:pointer;" @onclick="() => ViewResponse(r)">
+                    <td style="padding:8px;">@GetQuestion(r.QuestionId)</td>
+                    <td style="padding:8px;">@r.QuestionType</td>
+                    <td style="padding:8px;">@GetScore(r)</td>
+                    <td style="padding:8px;">@r.LastEdited.ToLocalTime().ToString("MM/dd/yyyy hh:mm tt")</td>
+                </tr>
+            }
+        </tbody>
+    </table>
 }
 
 @code {
     private List<InterviewResponse> _responses = new();
+    private List<InterviewQuestion> _questions = new();
 
     protected override void OnInitialized()
     {
         _responses = InterviewService.GetAllResponses();
+        _questions = InterviewService.GetAllQuestions();
+    }
+
+    private string GetQuestion(string questionId)
+    {
+        var q = _questions.FirstOrDefault(q => q.Id == questionId);
+        return q?.Question ?? questionId;
+    }
+
+    private string GetScore(InterviewResponse r)
+    {
+        if (r is StarResponse star)
+            return star.OverallScore > 0 ? $"{star.OverallScore}" : "Not scored";
+        return "N/A";
+    }
+
+    private void ViewResponse(InterviewResponse r)
+    {
+        Navigation.NavigateTo($"/star/{r.Id}");
     }
 }

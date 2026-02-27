@@ -34,11 +34,31 @@ namespace MiniProject_Take1.Services
 
         public void SaveResponse(InterviewResponse response)
         {
-            response.Id = Guid.NewGuid().ToString();
+            if (string.IsNullOrEmpty(response.Id))
+                response.Id = Guid.NewGuid().ToString();
             response.LastEdited = DateTime.UtcNow;
+            UpdateStatus(response);
             _responses.Add(response);
+        }
+        public void UpdateResponse(InterviewResponse response)
+        {
+            response.LastEdited = DateTime.UtcNow;
+            UpdateStatus(response);
         }
 
         public List<InterviewResponse> GetAllResponses() => _responses;
+
+        public void UpdateStatus(InterviewResponse response)
+        {
+            if (response is StarResponse star)
+            {
+                if (response.Status == ItemStatus.Todo)
+                    response.Status = ItemStatus.Wip;
+                else if (response.Status == ItemStatus.Wip && star.OverallScore >= 7)
+                    response.Status = ItemStatus.Solid;
+                else if (response.Status == ItemStatus.Solid && star.OverallScore >= 9)
+                    response.Status = ItemStatus.Mastered;
+            }
+        }
     }
 }

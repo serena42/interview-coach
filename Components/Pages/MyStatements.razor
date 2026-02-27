@@ -55,7 +55,7 @@ else
     private string GetScore(InterviewResponse r)
     {
         if (r is StarResponse star)
-            return star.OverallScore > 0 ? $"{star.OverallScore}/5" : "Not scored";
+            return star.OverallScore > 0 ? $"{star.OverallScore}" : "Not scored";
         return "N/A";
     }
 

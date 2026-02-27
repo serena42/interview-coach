@@ -54,7 +54,7 @@
         Todo,
         Wip,
         Solid, 
-        Mastery
+        Mastered
     }
 
 }

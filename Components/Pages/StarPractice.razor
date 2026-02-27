@@ -61,6 +61,8 @@ else if (_step == 2)
 }
 
 @code {
+    [SupplyParameterFromQuery]
+    public string QuestionId { get; set; }
     private List<InterviewQuestion> _questions = new();
     private List<StarRubric> _rubrics = new();
     private InterviewQuestion? _currentQuestion;
@@ -79,6 +81,13 @@ else if (_step == 2)
     {
         _questions = InterviewService.GetAllQuestions();
         _rubrics = RubricService.GetStarRubric();
+
+        if (!string.IsNullOrEmpty(QuestionId))
+        {
+            var idx = _questions.FindIndex(q => q.Id == QuestionId);
+            if (idx >= 0) _currentIndex = idx;
+        }
+
         if (_questions.Count > 0)
             _currentQuestion = _questions[_currentIndex];
     }

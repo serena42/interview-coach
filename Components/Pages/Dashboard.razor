@@ -1,0 +1,224 @@
+﻿@page "/dashboard"
+@rendermode InteractiveServer
+@inject InterviewService InterviewService
+@inject NavigationManager Navigation
+@using MiniProject_Take1.Services
+@using MiniProject_Take1.Domain.Interview
+@using MiniProject_Take1.Domain.Enums
+
+<h3>Dashboard</h3>
+
+<div style="display:flex; gap:20px; margin-bottom:20px;">
+
+    <div style="flex:1; border:1px solid #ccc; padding:10px;">
+        <h5>Todo (@_todo.Count)</h5>
+        <div style="max-height:400px; overflow-y:auto;">
+            <table style="width:100%; border-collapse:collapse; font-size:0.8em;">
+                @foreach (var q in _todo)
+                {
+                    <tr style="border-bottom:1px solid #eee; cursor:pointer;"
+                        @onclick="() => StartQuestion(q)">
+                        <td style="padding:3px 6px;">@GetShortLabel(q)</td>
+                    </tr>
+                }
+            </table>
+        </div>
+    </div>
+
+    <div style="flex:1; border:1px solid #f0a500; padding:10px;">
+        <h5>Wip (@_wip.Count)</h5>
+        @if (_wip.Count == 0)
+        {
+            <p style="color:#888; font-size:0.8em;">Nothing in progress.</p>
+        }
+        else
+        {
+            <div style="border:1px solid #ddd; padding:8px; background:#fffdf0;">
+                <p style="font-size:0.85em;"><strong>@GetQuestionText(_wip[_wipIndex])</strong></p>
+                <p style="font-size:0.75em; color:#666;">Score: @GetScore(_wip[_wipIndex])/10</p>
+                @if (_wip[_wipIndex].Deadline.HasValue)
+                {
+                    <p style="font-size:0.75em; color:red;">Due: @_wip[_wipIndex].Deadline.Value.ToShortDateString()</p>
+                }
+                <button @onclick="OpenWip">Open</button>
+            </div>
+            <div style="display:flex; justify-content:space-between; margin-top:8px;">
+                <button @onclick="PrevWip" disabled="@(_wip.Count <= 1)">◀</button>
+                <span style="font-size:0.8em;">@(_wipIndex + 1) / @_wip.Count</span>
+                <button @onclick="NextWip" disabled="@(_wip.Count <= 1)">▶</button>
+            </div>
+        }
+    </div>
+
+    <div style="flex:1; border:1px solid #5cb85c; padding:10px;">
+        <h5>Solid (@_solid.Count)</h5>
+        @if (_solid.Count == 0)
+        {
+            <p style="color:#888; font-size:0.8em;">Nothing solid yet.</p>
+        }
+        else
+        {
+            <div style="border:1px solid #ddd; padding:8px; background:#f0fff0;">
+                <p style="font-size:0.85em;"><strong>@GetQuestionText(_solid[_solidIndex])</strong></p>
+                <p style="font-size:0.75em; color:#666;">Score: @GetScore(_solid[_solidIndex])/10</p>
+                <button @onclick="OpenSolid">Practice</button>
+            </div>
+            <div style="display:flex; justify-content:space-between; margin-top:8px;">
+                <button @onclick="PrevSolid" disabled="@(_solid.Count <= 1)">◀</button>
+                <span style="font-size:0.8em;">@(_solidIndex + 1) / @_solid.Count</span>
+                <button @onclick="NextSolid" disabled="@(_solid.Count <= 1)">▶</button>
+            </div>
+        }
+    </div>
+
+    <div style="flex:1; border:1px solid #5bc0de; padding:10px;">
+        <h5>Mastered (@_mastered.Count)</h5>
+        <div style="max-height:400px; overflow-y:auto;">
+            <table style="width:100%; border-collapse:collapse; font-size:0.8em;">
+                @foreach (var r in _mastered)
+                {
+                    <tr style="border-bottom:1px solid #eee; cursor:pointer;"
+                        @onclick="() => OpenMastered(r)">
+                        <td style="padding:3px 6px;">@GetQuestionText(r)</td>
+                        <td style="padding:3px 6px; color:#888;">@GetScore(r)/10</td>
+                    </tr>
+                }
+            </table>
+        </div>
+    </div>
+
+</div>
+
+<hr />
+<h4>Recommended Next Steps</h4>
+<div style="display:flex; gap:20px;">
+    @if (_mostUrgent != null)
+    {
+        <div style="flex:1; border:1px solid #f0a500; padding:10px; cursor:pointer;"
+             @onclick="OpenUrgent">
+            <strong>Most Urgent</strong>
+            <p style="font-size:0.85em;">@GetQuestionText(_mostUrgent)</p>
+            <small>Due: @_mostUrgent.Deadline?.ToShortDateString()</small>
+        </div>
+    }
+    @if (_needsWork != null)
+    {
+        <div style="flex:1; border:1px solid #d9534f; padding:10px; cursor:pointer;"
+             @onclick="OpenNeedsWork">
+            <strong>Needs Most Work</strong>
+            <p style="font-size:0.85em;">@GetQuestionText(_needsWork)</p>
+            <small>Score: @GetScore(_needsWork)/10</small>
+        </div>
+    }
+    @if (_readyToPractice != null)
+    {
+        <div style="flex:1; border:1px solid #5cb85c; padding:10px; cursor:pointer;"
+             @onclick="OpenReadyToPractice">
+            <strong>Ready to Practice</strong>
+            <p style="font-size:0.85em;">@GetQuestionText(_readyToPractice)</p>
+            <small>Last edited: @_readyToPractice.LastEdited.ToShortDateString()</small>
+        </div>
+    }
+    <div style="flex:1; border:1px solid #5bc0de; padding:10px;">
+        <strong>Challenge</strong>
+        <p style="font-size:0.85em;">How many minutes do you have?</p>
+        <input type="number" @bind="_challengeMinutes" style="width:60px;" /> min
+        <button @onclick="StartChallenge" style="margin-left:10px;">Go</button>
+    </div>
+</div>
+
+@code {
+    private List<InterviewQuestion> _questions = new();
+    private List<InterviewQuestion> _todo = new();
+    private List<InterviewResponse> _wip = new();
+    private List<InterviewResponse> _solid = new();
+    private List<InterviewResponse> _mastered = new();
+
+    private int _wipIndex = 0;
+    private int _solidIndex = 0;
+
+    private InterviewResponse? _mostUrgent;
+    private InterviewResponse? _needsWork;
+    private InterviewResponse? _readyToPractice;
+    private int _challengeMinutes = 20;
+
+    protected override void OnInitialized()
+    {
+        _questions = InterviewService.GetAllQuestions();
+        var responses = InterviewService.GetAllResponses();
+        var answeredIds = responses.Select(r => r.QuestionId).ToHashSet();
+
+        _todo = _questions.Where(q => !answeredIds.Contains(q.Id)).ToList();
+        _wip = responses.Where(r => r.Status == ItemStatus.WIP)
+                        .OrderBy(r => r.Deadline ?? DateTime.MaxValue)
+                        .ThenBy(r => GetScore(r)).ToList();
+        _solid = responses.Where(r => r.Status == ItemStatus.Solid)
+                          .OrderBy(r => r.LastEdited).ToList();
+        _mastered = responses.Where(r => r.Status == ItemStatus.Mastered)
+                             .OrderByDescending(r => r.LastEdited).ToList();
+
+        ComputeRecommendations(responses);
+    }
+
+    private string GetShortLabel(InterviewQuestion q)
+    {
+        var prefix = q.QuestionType switch
+        {
+            QuestionType.Behavioral => "STAR",
+            QuestionType.Situational => "STAR",
+            QuestionType.Narrative => "Narrative",
+            QuestionType.Technical => "Technical",
+            _ => "Other"
+        };
+        return string.IsNullOrEmpty(q.Competency) ? prefix : $"{prefix} {q.Competency}";
+    }
+
+    private string GetQuestionText(InterviewResponse r)
+    {
+        var q = _questions.FirstOrDefault(q => q.Id == r.QuestionId);
+        return q?.Question ?? r.QuestionId;
+    }
+
+    private string GetQuestionText(InterviewQuestion q) => q.Question;
+
+    private float GetScore(InterviewResponse r)
+    {
+        if (r is StarResponse star) return star.OverallScore;
+        return 0;
+    }
+
+    private void ComputeRecommendations(List<InterviewResponse> responses)
+    {
+        _mostUrgent = responses
+            .Where(r => r.Deadline.HasValue)
+            .OrderBy(r => r.Deadline)
+            .FirstOrDefault();
+
+        _needsWork = responses
+            .Where(r => r.Status == ItemStatus.WIP)
+            .OrderBy(r => GetScore(r))
+            .FirstOrDefault();
+
+        _readyToPractice = responses
+            .Where(r => r.Status == ItemStatus.Solid)
+            .OrderBy(r => r.LastEdited)
+            .FirstOrDefault();
+    }
+
+    private void StartQuestion(InterviewQuestion q) =>
+        Navigation.NavigateTo($"/star?questionId={q.Id}");
+
+    private void OpenWip() => Navigation.NavigateTo($"/star/{_wip[_wipIndex].Id}");
+    private void OpenSolid() => Navigation.NavigateTo($"/star/{_solid[_solidIndex].Id}");
+    private void OpenMastered(InterviewResponse r) => Navigation.NavigateTo($"/star/{r.Id}");
+    private void OpenUrgent() => Navigation.NavigateTo($"/star/{_mostUrgent!.Id}");
+    private void OpenNeedsWork() => Navigation.NavigateTo($"/star/{_needsWork!.Id}");
+    private void OpenReadyToPractice() => Navigation.NavigateTo($"/star/{_readyToPractice!.Id}");
+
+    private void PrevWip() => _wipIndex = (_wipIndex - 1 + _wip.Count) % _wip.Count;
+    private void NextWip() => _wipIndex = (_wipIndex + 1) % _wip.Count;
+    private void PrevSolid() => _solidIndex = (_solidIndex - 1 + _solid.Count) % _solid.Count;
+    private void NextSolid() => _solidIndex = (_solidIndex + 1) % _solid.Count;
+
+    private void StartChallenge() { }
+}

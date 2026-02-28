@@ -48,4 +48,12 @@
         Indeed,
         Other
     }
+
+    public enum ItemStatus
+    {
+        TODO,
+        WIP,
+        Solid,
+        Mastered
+    }
 }

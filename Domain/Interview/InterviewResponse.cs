@@ -1,6 +1,5 @@
 ﻿using MiniProject_Take1.Domain.Enums;
 using System.Text.Json.Serialization;
-using static MiniProject_Take1.Domain.Interview.FreeFormResponse;
 
 namespace MiniProject_Take1.Domain.Interview
 {
@@ -16,5 +15,7 @@ namespace MiniProject_Take1.Domain.Interview
         public ConfidenceLevel Confidence { get; set; }
         public string Company { get; set; }
         public string Role { get; set; }
+        public ItemStatus Status { get; set; }
+        public DateTime? Deadline { get; set; }
     }
 }

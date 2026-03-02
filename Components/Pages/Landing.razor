@@ -8,6 +8,17 @@
     <h2>Interview Coach</h2>
     <p>Practice and track your interview preparation.</p>
 
+    @if (_showRestorePrompt)
+    {
+        <div style="background:#fff3cd; border:1px solid #ffc107; padding:16px; border-radius:4px; margin-bottom:24px;">
+            <p style="margin:0 0 10px;"><strong>Unsaved session found.</strong> Would you like to restore it?</p>
+            <div style="display:flex; gap:10px; justify-content:center;">
+                <button @onclick="RestoreSession">Restore Session</button>
+                <button @onclick="DiscardAutoSave" style="background:#eee; color:#333;">Discard</button>
+            </div>
+        </div>
+    }
+
     <div style="margin-top:40px;">
         <button @onclick="NewSession">New Session</button>
         <p style="margin:20px 0;">or</p>
@@ -22,11 +33,29 @@
 </div>
 
 @code {
-    private string _error;
+    private string _error = string.Empty;
+    private bool _showRestorePrompt = false;
+
+    protected override void OnInitialized()
+    {
+        _showRestorePrompt = SessionService.HasAutoSave();
+    }
+
+    private void RestoreSession()
+    {
+        SessionService.RestoreAutoSave();
+        Navigation.NavigateTo("/dashboard");
+    }
+
+    private void DiscardAutoSave()
+    {
+        SessionService.ClearAutoSave();
+        _showRestorePrompt = false;
+    }
 
     private void NewSession()
     {
-        Navigation.NavigateTo("/star");
+        Navigation.NavigateTo("/dashboard");
     }
 
     private async Task LoadSession(InputFileChangeEventArgs e)
@@ -38,7 +67,7 @@
             using var reader = new StreamReader(stream);
             var json = await reader.ReadToEndAsync();
             SessionService.ImportSession(json);
-            Navigation.NavigateTo("/star");
+            Navigation.NavigateTo("/dashboard");
         }
         catch (Exception ex)
         {

@@ -9,7 +9,12 @@ namespace MiniProject_Take1.Services
     {
         private List<InterviewQuestion> _questions = new();
         private List<InterviewResponse> _responses = new();
+        private Action? _onSave;
 
+        public void RegisterAutoSave(Action onSave)
+        {
+            _onSave = onSave;
+        }
 
         public async Task LoadQuestionsAsync(params string[] jsonPaths)
         {
@@ -41,11 +46,7 @@ namespace MiniProject_Take1.Services
 
         public List<InterviewQuestion> GetByType(QuestionType type) =>
             _questions.Where(q => q.QuestionType == type).ToList();
-        public void UpdateResponse(InterviewResponse response)
-        {
-            response.LastEdited = DateTime.UtcNow;
-            UpdateStatus(response);
-        }
+
 
         public List<InterviewQuestion> GetNewForReview()
         {
@@ -110,15 +111,21 @@ namespace MiniProject_Take1.Services
                 // Map 1-5 rating to 1-10 score so status promotion logic works
                 free.Score = rating * 2;
             }
-
-            UpdateResponse(response);
         }
         public void SaveResponse(InterviewResponse response)
         {
             response.Id = Guid.NewGuid().ToString();
             response.LastEdited = DateTime.UtcNow;
-            UpdateResponse(response);
+            UpdateStatus(response);
             _responses.Add(response);
+            _onSave?.Invoke();
+        }
+
+        public void UpdateResponse(InterviewResponse response)
+        {
+            response.LastEdited = DateTime.UtcNow;
+            UpdateStatus(response);
+            _onSave?.Invoke();
         }
 
         public List<InterviewResponse> GetAllResponses() => _responses;

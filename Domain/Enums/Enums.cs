@@ -37,7 +37,7 @@
         Behavioral,
         Situational,
         Narrative,
-        Technical
+        Technical, Coding,
     }
 
     public enum SourceType
@@ -56,4 +56,6 @@
         Solid,
         Mastered
     }
+
+    public enum DifficultyLevel { Basic, Intermediate, Advanced }
 }

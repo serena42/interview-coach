@@ -77,8 +77,8 @@
         <div style="max-height:80vh; overflow-y:auto;">
             @foreach (var group in GroupedQuestions())
             {
-                <div style="font-size:0.7em; font-weight:bold; color:#888; margin-top:10px; margin-bottom:4px; text-transform:uppercase;">@group.Key</div>
-                @foreach (var q in group)
+                <div style="font-size:0.7em; font-weight:bold; color:#888; margin-top:10px; margin-bottom:4px; text-transform:uppercase;">@group.Item1</div>
+                @foreach (var q in group.Item2)
                 {
                     var isActive = _currentQuestion?.Id == q.Id;
                     <div style="padding:4px 6px; font-size:0.78em; cursor:pointer; background:@(isActive ? "#e0f0ff" : "transparent"); border-bottom:1px solid #eee;"
@@ -383,23 +383,7 @@
         LoadQuestion(q, existing);
     }
 
-    private IEnumerable<IGrouping<string, InterviewQuestion>> GroupedQuestions() =>
-     _questions
-         .OrderBy(q => q.QuestionType switch
-         {
-             QuestionType.Narrative => 0,
-             QuestionType.Behavioral => 1,
-             QuestionType.Situational => 2,
-             _ => 3
-         })
-         .ThenBy(q => q.Competency)
-         .GroupBy(q => q.QuestionType switch
-         {
-             QuestionType.Narrative => "Narrative",
-             QuestionType.Behavioral => "Behavioral",
-             QuestionType.Situational => "Situational",
-             _ => "Other"
-         });
+
 
     private string GetFieldValue(string field) => field switch
     {
@@ -409,6 +393,16 @@
         "Result" => _starResponse?.Result ?? "",
         _ => ""
     };
+    private List<(string Label, List<InterviewQuestion> Questions)> GroupedQuestions()
+    {
+        var groups = new List<(string, List<InterviewQuestion>)>
+    {
+        ("Narrative", _questions.Where(q => q.QuestionType == QuestionType.Narrative).ToList()),
+        ("Behavioral", _questions.Where(q => q.QuestionType == QuestionType.Behavioral).ToList()),
+        ("Situational", _questions.Where(q => q.QuestionType == QuestionType.Situational).ToList())
+    };
+        return groups.Where(g => g.Item2.Count > 0).ToList();
+    }
 
     private void SetField(string field, string? value)
     {

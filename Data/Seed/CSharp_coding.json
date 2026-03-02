@@ -1,0 +1,518 @@
+[
+  {
+    "id": "CSC001",
+    "question": "How do you declare a variable in C#?",
+    "competency": "C# Syntax",
+    "questionType": "Coding",
+    "difficulty": "Basic",
+    "whyAsked": null,
+    "answerPoints": [
+      "Syntax: type variableName = value;",
+      "Example: int age = 25;",
+      "Example: string name = \"Alice\";",
+      "Using var: var count = 10; — compiler infers int",
+      "Variables must be initialized before use"
+    ]
+  },
+  {
+    "id": "CSC002",
+    "question": "What are the basic variable types in C#?",
+    "competency": "C# Syntax",
+    "questionType": "Coding",
+    "difficulty": "Basic",
+    "whyAsked": null,
+    "answerPoints": [
+      "int — whole numbers: int age = 25;",
+      "double / float / decimal — decimal numbers: double price = 9.99;",
+      "bool — true or false: bool isActive = true;",
+      "string — text: string name = \"Alice\";",
+      "char — single character: char grade = 'A';",
+      "long — large whole numbers: long bigNumber = 9999999999L;"
+    ]
+  },
+  {
+    "id": "CSC003",
+    "question": "What is the syntax for an if statement in C#?",
+    "competency": "C# Syntax",
+    "questionType": "Coding",
+    "difficulty": "Basic",
+    "whyAsked": null,
+    "answerPoints": [
+      "if (condition) { } else if (condition) { } else { }",
+      "Example: if (age >= 18) { Console.WriteLine(\"Adult\"); } else { Console.WriteLine(\"Minor\"); }",
+      "Curly braces are optional for single statements but recommended",
+      "Condition must evaluate to a bool"
+    ]
+  },
+  {
+    "id": "CSC004",
+    "question": "What is the syntax for a for loop in C#?",
+    "competency": "C# Syntax",
+    "questionType": "Coding",
+    "difficulty": "Basic",
+    "whyAsked": null,
+    "answerPoints": [
+      "for (initializer; condition; iterator) { }",
+      "Example: for (int i = 0; i < 10; i++) { Console.WriteLine(i); }",
+      "The initializer runs once at the start",
+      "The condition is checked before each iteration",
+      "The iterator runs after each iteration"
+    ]
+  },
+  {
+    "id": "CSC005",
+    "question": "What is the syntax for a foreach loop in C#?",
+    "competency": "C# Syntax",
+    "questionType": "Coding",
+    "difficulty": "Basic",
+    "whyAsked": null,
+    "answerPoints": [
+      "foreach (var item in collection) { }",
+      "Example: foreach (var name in names) { Console.WriteLine(name); }",
+      "Works on any IEnumerable — arrays, lists, dictionaries, etc.",
+      "You cannot modify the collection while iterating with foreach"
+    ]
+  },
+  {
+    "id": "CSC006",
+    "question": "What is the syntax for a switch statement in C#?",
+    "competency": "C# Syntax",
+    "questionType": "Coding",
+    "difficulty": "Basic",
+    "whyAsked": null,
+    "answerPoints": [
+      "switch (value) { case 1: // code; break; case 2: // code; break; default: // code; break; }",
+      "Each case needs a break to prevent fall-through",
+      "default handles any value not matched by a case",
+      "C# 8+ switch expression: var result = value switch { 1 => \"one\", 2 => \"two\", _ => \"other\" };"
+    ]
+  },
+  {
+    "id": "CSC007",
+    "question": "How do you print to the console in C#?",
+    "competency": "C# Syntax",
+    "questionType": "Coding",
+    "difficulty": "Basic",
+    "whyAsked": null,
+    "answerPoints": [
+      "Console.WriteLine(value) — prints with a newline",
+      "Console.Write(value) — prints without a newline",
+      "String interpolation: Console.WriteLine($\"Hello, {name}!\");",
+      "String.Format: Console.WriteLine(\"Hello, {0}!\", name);"
+    ]
+  },
+  {
+    "id": "CSC008",
+    "question": "How do you declare and initialize an array in C#?",
+    "competency": "C# Syntax",
+    "questionType": "Coding",
+    "difficulty": "Basic",
+    "whyAsked": null,
+    "answerPoints": [
+      "Declare with size: int[] numbers = new int[5];",
+      "Declare and initialize: int[] numbers = { 1, 2, 3, 4, 5 };",
+      "Access by index (zero-based): numbers[0] = 10;",
+      "Get length: numbers.Length",
+      "Iterate: foreach (var n in numbers) { }"
+    ]
+  },
+  {
+    "id": "CSC009",
+    "question": "How do you declare a multidimensional array in C#?",
+    "competency": "C# Syntax",
+    "questionType": "Coding",
+    "difficulty": "Advanced",
+    "whyAsked": null,
+    "answerPoints": [
+      "2D array: int[,] grid = new int[3, 4]; — 3 rows, 4 columns",
+      "Access: grid[row, col]",
+      "Jagged array (array of arrays): int[][] jagged = new int[3][];",
+      "Each row of a jagged array can have a different length",
+      "Initialize a jagged row: jagged[0] = new int[] { 1, 2, 3 };"
+    ]
+  },
+  {
+    "id": "CSC010",
+    "question": "How do you write a method in C#?",
+    "competency": "C# Syntax",
+    "questionType": "Coding",
+    "difficulty": "Basic",
+    "whyAsked": null,
+    "answerPoints": [
+      "Syntax: accessModifier returnType MethodName(parameters) { }",
+      "Example: public int Add(int a, int b) { return a + b; }",
+      "Use void if the method returns nothing: public void PrintName(string name) { }",
+      "Expression body shorthand: public int Add(int a, int b) => a + b;"
+    ]
+  },
+  {
+    "id": "CSC011",
+    "question": "How do you pass parameters to a method in C#?",
+    "competency": "C# Syntax",
+    "questionType": "Coding",
+    "difficulty": "Basic",
+    "whyAsked": null,
+    "answerPoints": [
+      "By value (default): a copy is passed — changes inside the method don't affect the caller",
+      "By reference with ref: public void Double(ref int x) { x *= 2; } — caller's variable is modified",
+      "Out parameter: public bool TryGet(out int result) { result = 42; return true; }",
+      "Optional parameter: public void Greet(string name = \"World\") { }",
+      "Named parameter call: Greet(name: \"Alice\");"
+    ]
+  },
+  {
+    "id": "CSC012",
+    "question": "How do you write a try/catch/finally block in C#?",
+    "competency": "C# Syntax",
+    "questionType": "Coding",
+    "difficulty": "Basic",
+    "whyAsked": null,
+    "answerPoints": [
+      "try { // risky code } catch (ExceptionType ex) { // handle } finally { // always runs }",
+      "Multiple catch blocks: catch (FormatException ex) { } catch (Exception ex) { }",
+      "More specific exceptions should come before more general ones",
+      "Example: try { int x = int.Parse(input); } catch (FormatException ex) { Console.WriteLine(ex.Message); }"
+    ]
+  },
+  {
+    "id": "CSC013",
+    "question": "How do you declare a class and constructor in C#?",
+    "competency": "C# Syntax",
+    "questionType": "Coding",
+    "difficulty": "Basic",
+    "whyAsked": null,
+    "answerPoints": [
+      "Class: public class Person { }",
+      "Constructor: public Person(string name) { Name = name; }",
+      "Auto property: public string Name { get; set; }",
+      "Multiple constructors: public Person() { } and public Person(string name) { Name = name; }",
+      "Call another constructor: public Person() : this(\"Unknown\") { }"
+    ]
+  },
+  {
+    "id": "CSC014",
+    "question": "How do you implement an interface in C#?",
+    "competency": "C# Syntax",
+    "questionType": "Coding",
+    "difficulty": "Intermediate",
+    "whyAsked": null,
+    "answerPoints": [
+      "Declare interface: public interface IAnimal { void Speak(); }",
+      "Implement: public class Dog : IAnimal { public void Speak() { Console.WriteLine(\"Woof\"); } }",
+      "All interface members must be implemented",
+      "Multiple interfaces: public class Dog : IAnimal, ITrainable { }",
+      "Use interface type as variable: IAnimal animal = new Dog();"
+    ]
+  },
+  {
+    "id": "CSC015",
+    "question": "How do you declare a struct in C#?",
+    "competency": "C# Syntax",
+    "questionType": "Coding",
+    "difficulty": "Intermediate",
+    "whyAsked": null,
+    "answerPoints": [
+      "public struct Point { public int X { get; set; } public int Y { get; set; } }",
+      "Constructor: public Point(int x, int y) { X = x; Y = y; }",
+      "Usage: Point p = new Point(3, 5);",
+      "Structs are value types — assigning copies the data, not a reference"
+    ]
+  },
+  {
+    "id": "CSC016",
+    "question": "How do you use the string Substring method?",
+    "competency": "C# Syntax",
+    "questionType": "Coding",
+    "difficulty": "Basic",
+    "whyAsked": null,
+    "answerPoints": [
+      "str.Substring(startIndex) — returns everything from startIndex to end",
+      "str.Substring(startIndex, length) — returns 'length' characters starting at startIndex",
+      "Example: \"Hello World\".Substring(6) returns \"World\"",
+      "Example: \"Hello World\".Substring(0, 5) returns \"Hello\"",
+      "Index is zero-based"
+    ]
+  },
+  {
+    "id": "CSC017",
+    "question": "How do you use the string Replace method?",
+    "competency": "C# Syntax",
+    "questionType": "Coding",
+    "difficulty": "Basic",
+    "whyAsked": null,
+    "answerPoints": [
+      "str.Replace(oldValue, newValue) — replaces all occurrences of oldValue with newValue",
+      "Example: \"Hello World\".Replace(\"World\", \"C#\") returns \"Hello C#\"",
+      "Returns a new string — strings are immutable so the original is unchanged",
+      "Case-sensitive by default"
+    ]
+  },
+  {
+    "id": "CSC018",
+    "question": "How do you use the string Split method?",
+    "competency": "C# Syntax",
+    "questionType": "Coding",
+    "difficulty": "Basic",
+    "whyAsked": null,
+    "answerPoints": [
+      "str.Split(delimiter) — splits into an array of strings at each delimiter",
+      "Example: \"a,b,c\".Split(',') returns [\"a\", \"b\", \"c\"]",
+      "Can split on multiple characters: str.Split(',', ';')",
+      "Returns a string[] — use with foreach or index access"
+    ]
+  },
+  {
+    "id": "CSC019",
+    "question": "How do you use the string Contains method?",
+    "competency": "C# Syntax",
+    "questionType": "Coding",
+    "difficulty": "Basic",
+    "whyAsked": null,
+    "answerPoints": [
+      "str.Contains(value) — returns true if the string contains the given value",
+      "Example: \"Hello World\".Contains(\"World\") returns true",
+      "Case-sensitive by default",
+      "For case-insensitive: str.Contains(value, StringComparison.OrdinalIgnoreCase)"
+    ]
+  },
+  {
+    "id": "CSC020",
+    "question": "How do you use the string ToUpper and ToLower methods?",
+    "competency": "C# Syntax",
+    "questionType": "Coding",
+    "difficulty": "Basic",
+    "whyAsked": null,
+    "answerPoints": [
+      "str.ToUpper() — returns the string in all uppercase",
+      "str.ToLower() — returns the string in all lowercase",
+      "Example: \"hello\".ToUpper() returns \"HELLO\"",
+      "Returns a new string — original is unchanged",
+      "Useful for case-insensitive comparisons: str.ToLower() == other.ToLower()"
+    ]
+  },
+  {
+    "id": "CSC021",
+    "question": "How do you use the string Trim method?",
+    "competency": "C# Syntax",
+    "questionType": "Coding",
+    "difficulty": "Basic",
+    "whyAsked": null,
+    "answerPoints": [
+      "str.Trim() — removes whitespace from both ends of the string",
+      "str.TrimStart() — removes whitespace from the beginning only",
+      "str.TrimEnd() — removes whitespace from the end only",
+      "Example: \"  hello  \".Trim() returns \"hello\"",
+      "Commonly used to clean up user input"
+    ]
+  },
+  {
+    "id": "CSC022",
+    "question": "How do you use string.IsNullOrEmpty and string.IsNullOrWhiteSpace?",
+    "competency": "C# Syntax",
+    "questionType": "Coding",
+    "difficulty": "Basic",
+    "whyAsked": null,
+    "answerPoints": [
+      "string.IsNullOrEmpty(str) — returns true if str is null or has zero length",
+      "string.IsNullOrWhiteSpace(str) — returns true if str is null, empty, or only whitespace",
+      "Example: string.IsNullOrWhiteSpace(\"   \") returns true",
+      "IsNullOrWhiteSpace is usually the better choice for validating user input",
+      "These are static methods — called on the string class, not an instance"
+    ]
+  },
+  {
+    "id": "CSC023",
+    "question": "How do you use StringBuilder in C#?",
+    "competency": "C# Syntax",
+    "questionType": "Coding",
+    "difficulty": "Intermediate",
+    "whyAsked": null,
+    "answerPoints": [
+      "var sb = new StringBuilder();",
+      "sb.Append(\"Hello\"); — adds text without a newline",
+      "sb.AppendLine(\"World\"); — adds text with a newline",
+      "sb.ToString(); — converts to a regular string when done",
+      "Use in loops instead of + concatenation for better performance"
+    ]
+  },
+  {
+    "id": "CSC024",
+    "question": "How do you use List<T> in C#?",
+    "competency": "C# Syntax",
+    "questionType": "Coding",
+    "difficulty": "Basic",
+    "whyAsked": null,
+    "answerPoints": [
+      "var list = new List<string>();",
+      "Add: list.Add(\"Alice\");",
+      "Remove: list.Remove(\"Alice\");",
+      "Access by index: list[0]",
+      "Count: list.Count",
+      "Check existence: list.Contains(\"Alice\")",
+      "Iterate: foreach (var item in list) { }"
+    ]
+  },
+  {
+    "id": "CSC025",
+    "question": "How do you use Dictionary<TKey, TValue> in C#?",
+    "competency": "C# Syntax",
+    "questionType": "Coding",
+    "difficulty": "Basic",
+    "whyAsked": null,
+    "answerPoints": [
+      "var dict = new Dictionary<string, int>();",
+      "Add: dict[\"Alice\"] = 30; or dict.Add(\"Alice\", 30);",
+      "Access: int age = dict[\"Alice\"];",
+      "Safe access: dict.TryGetValue(\"Alice\", out int age)",
+      "Check key exists: dict.ContainsKey(\"Alice\")",
+      "Iterate: foreach (var kvp in dict) { Console.WriteLine(kvp.Key + \": \" + kvp.Value); }"
+    ]
+  },
+  {
+    "id": "CSC026",
+    "question": "How do you write a LINQ Where query?",
+    "competency": "LINQ",
+    "questionType": "Coding",
+    "difficulty": "Intermediate",
+    "whyAsked": null,
+    "answerPoints": [
+      "employees.Where(e => e.LastName == \"Smith\").ToList()",
+      "The lambda e => e.LastName == \"Smith\" is the filter condition",
+      "Where returns an IEnumerable — call ToList() to get a List",
+      "Query syntax alternative: (from e in employees where e.LastName == \"Smith\" select e).ToList()"
+    ]
+  },
+  {
+    "id": "CSC027",
+    "question": "How do you use LINQ OrderBy?",
+    "competency": "LINQ",
+    "questionType": "Coding",
+    "difficulty": "Intermediate",
+    "whyAsked": null,
+    "answerPoints": [
+      "employees.OrderBy(e => e.LastName).ToList() — ascending order",
+      "employees.OrderByDescending(e => e.Salary).ToList() — descending order",
+      "Chain with ThenBy for secondary sort: .OrderBy(e => e.LastName).ThenBy(e => e.FirstName)",
+      "OrderBy does not modify the original list — it returns a new sequence"
+    ]
+  },
+  {
+    "id": "CSC028",
+    "question": "How do you use LINQ Select?",
+    "competency": "LINQ",
+    "questionType": "Coding",
+    "difficulty": "Intermediate",
+    "whyAsked": null,
+    "answerPoints": [
+      "Select projects each element into a new form",
+      "Example: employees.Select(e => e.FirstName).ToList() — returns a list of names",
+      "Can project to anonymous types: employees.Select(e => new { e.FirstName, e.Salary })",
+      "Think of it as the LINQ equivalent of a SQL SELECT column list"
+    ]
+  },
+  {
+    "id": "CSC029",
+    "question": "How do you use LINQ FirstOrDefault?",
+    "competency": "LINQ",
+    "questionType": "Coding",
+    "difficulty": "Intermediate",
+    "whyAsked": null,
+    "answerPoints": [
+      "Returns the first element matching a condition, or null/default if none found",
+      "Example: employees.FirstOrDefault(e => e.Id == 5)",
+      "Always check for null before using the result",
+      "First() is similar but throws an exception if no match — use FirstOrDefault for safety",
+      "SingleOrDefault() is like FirstOrDefault but throws if more than one match is found"
+    ]
+  },
+  {
+    "id": "CSC030",
+    "question": "How do you declare a delegate and event in C#?",
+    "competency": "C# Advanced",
+    "questionType": "Coding",
+    "difficulty": "Advanced",
+    "whyAsked": null,
+    "answerPoints": [
+      "Delegate: public delegate void MyDelegate(string message);",
+      "Event: public event MyDelegate OnSomething;",
+      "Subscribe: myObject.OnSomething += HandleIt;",
+      "Raise: OnSomething?.Invoke(\"hello\");",
+      "Unsubscribe: myObject.OnSomething -= HandleIt;",
+      "Shorthand with built-in delegates: public event Action<string> OnSomething;"
+    ]
+  },
+  {
+    "id": "CSC031",
+    "question": "How do you write an async method in C#?",
+    "competency": "C# Advanced",
+    "questionType": "Coding",
+    "difficulty": "Advanced",
+    "whyAsked": null,
+    "answerPoints": [
+      "Mark method with async: public async Task<string> GetDataAsync() { }",
+      "Use await before async calls: var result = await httpClient.GetStringAsync(url);",
+      "Return Task for void, Task<T> for a value",
+      "Avoid async void except for event handlers",
+      "Always await async calls — don't fire and forget"
+    ]
+  },
+  {
+    "id": "CSC032",
+    "question": "How do you write an extension method in C#?",
+    "competency": "C# Advanced",
+    "questionType": "Coding",
+    "difficulty": "Advanced",
+    "whyAsked": null,
+    "answerPoints": [
+      "Must be in a static class",
+      "Method must be static",
+      "First parameter uses 'this' followed by the type being extended",
+      "Example: public static class StringExtensions { public static bool IsEmpty(this string s) => s.Length == 0; }",
+      "Call like an instance method: myString.IsEmpty()"
+    ]
+  },
+  {
+    "id": "CSC033",
+    "question": "How do you use the 'using' statement for resource cleanup?",
+    "competency": "C# Syntax",
+    "questionType": "Coding",
+    "difficulty": "Intermediate",
+    "whyAsked": null,
+    "answerPoints": [
+      "using (var reader = new StreamReader(path)) { // use reader } — Dispose() called automatically",
+      "C# 8+ simplified: using var reader = new StreamReader(path); — no braces needed",
+      "Works with any class implementing IDisposable",
+      "Cleaner alternative to try/finally for resource cleanup"
+    ]
+  },
+  {
+    "id": "CSC034",
+    "question": "How do you use the lock statement in C#?",
+    "competency": "C# Advanced",
+    "questionType": "Coding",
+    "difficulty": "Advanced",
+    "whyAsked": null,
+    "answerPoints": [
+      "private readonly object _lock = new object();",
+      "lock (_lock) { // only one thread runs this at a time }",
+      "The lock object should be private and dedicated",
+      "Prevents race conditions when multiple threads access shared data",
+      "Keep locked sections as short as possible to avoid performance issues"
+    ]
+  },
+  {
+    "id": "CSC035",
+    "question": "How do you create and start a Task in C#?",
+    "competency": "C# Advanced",
+    "questionType": "Coding",
+    "difficulty": "Advanced",
+    "whyAsked": null,
+    "answerPoints": [
+      "Task.Run(() => { // code to run on thread pool });",
+      "Await it: await Task.Run(() => DoWork());",
+      "Task.Factory.StartNew() is an older alternative with more options",
+      "Calling an async method returns a Task you can await: var result = await GetDataAsync();",
+      "Task.WhenAll(task1, task2) — await multiple tasks at once"
+    ]
+  }
+]

@@ -17,5 +17,7 @@ namespace MiniProject_Take1.Domain.Interview
         public string Role { get; set; }
         public ItemStatus Status { get; set; }
         public DateTime? Deadline { get; set; }
+        public DateTime? NextReviewDate { get; set; }
+        public int ReviewInterval { get; set; } = 1;
     }
 }

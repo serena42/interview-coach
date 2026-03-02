@@ -1,0 +1,993 @@
+[
+  {
+    "id": "CST001",
+    "question": "What is .NET?",
+    "competency": "C# Fundamentals",
+    "questionType": "Technical",
+    "difficulty": "Basic",
+    "whyAsked": null,
+    "answerPoints": [
+      ".NET is a free, open-source development platform made by Microsoft",
+      "It lets you build many types of applications — web, desktop, mobile, cloud, and more",
+      "It provides a runtime (CLR) that executes your code",
+      "It also provides a large library of pre-built functionality called the BCL (Base Class Library)",
+      "Languages like C#, VB.NET, and F# all run on .NET and can work together"
+    ]
+  },
+  {
+    "id": "CST002",
+    "question": "What languages can you use with .NET?",
+    "competency": "C# Fundamentals",
+    "questionType": "Technical",
+    "difficulty": "Basic",
+    "whyAsked": null,
+    "answerPoints": [
+      "C# is the most common and widely used .NET language",
+      "VB.NET (Visual Basic) is another option, historically popular in enterprise",
+      "F# is a functional-first language also supported on .NET",
+      "All .NET languages compile to the same intermediate language (IL), which is why they can interoperate"
+    ]
+  },
+  {
+    "id": "CST003",
+    "question": "How can different .NET languages interoperate?",
+    "competency": "C# Fundamentals",
+    "questionType": "Technical",
+    "difficulty": "Basic",
+    "whyAsked": null,
+    "answerPoints": [
+      "All .NET languages compile down to the same Intermediate Language (IL)",
+      "The CLR executes that IL regardless of which language wrote it",
+      "This means a C# class can inherit from a VB.NET class, for example",
+      "The Common Type System (CTS) ensures types are compatible across languages"
+    ]
+  },
+  {
+    "id": "CST004",
+    "question": "What is a namespace?",
+    "competency": "C# Fundamentals",
+    "questionType": "Technical",
+    "difficulty": "Basic",
+    "whyAsked": null,
+    "answerPoints": [
+      "A namespace is a way to organize and group related classes and types",
+      "It prevents naming conflicts between classes that share the same name in different libraries",
+      "Declared with the 'namespace' keyword",
+      "You access types using 'using' at the top of a file, or the fully qualified name (e.g. System.Collections.Generic.List)"
+    ]
+  },
+  {
+    "id": "CST005",
+    "question": "Can you have multiple namespaces in one assembly?",
+    "competency": "C# Fundamentals",
+    "questionType": "Technical",
+    "difficulty": "Basic",
+    "whyAsked": null,
+    "answerPoints": [
+      "Yes, a single assembly (.dll or .exe) can contain multiple namespaces",
+      "Namespaces are a logical grouping — assemblies are a physical deployment unit",
+      "They are independent concepts and don't have to match",
+      "Example: a single dll might contain MyApp.Data, MyApp.Services, and MyApp.Models"
+    ]
+  },
+  {
+    "id": "CST006",
+    "question": "What is the difference between a value type and a reference type?",
+    "competency": "C# Fundamentals",
+    "questionType": "Technical",
+    "difficulty": "Basic",
+    "whyAsked": null,
+    "answerPoints": [
+      "Value types store their data directly — examples: int, float, bool, struct",
+      "Reference types store a reference (pointer) to where the data lives in memory — examples: class, string, array",
+      "Value types typically live on the stack; reference types live on the heap",
+      "Assigning a value type copies the value; assigning a reference type copies the reference, not the data"
+    ]
+  },
+  {
+    "id": "CST007",
+    "question": "Give examples of value types in C#",
+    "competency": "C# Fundamentals",
+    "questionType": "Technical",
+    "difficulty": "Basic",
+    "whyAsked": null,
+    "answerPoints": [
+      "int, long, short, byte — integer types",
+      "float, double, decimal — floating point types",
+      "bool — true/false",
+      "char — a single character",
+      "struct — any custom struct you define",
+      "enum — enumerations are also value types"
+    ]
+  },
+  {
+    "id": "CST008",
+    "question": "Give examples of reference types in C#",
+    "competency": "C# Fundamentals",
+    "questionType": "Technical",
+    "difficulty": "Basic",
+    "whyAsked": null,
+    "answerPoints": [
+      "class — any class you define",
+      "string — even though it behaves like a value type due to immutability",
+      "array — even arrays of value types are reference types",
+      "interface, delegate — both are reference types",
+      "object — the base type of all types in C#"
+    ]
+  },
+  {
+    "id": "CST009",
+    "question": "What is the difference between Parse and TryParse?",
+    "competency": "C# Fundamentals",
+    "questionType": "Technical",
+    "difficulty": "Basic",
+    "whyAsked": null,
+    "answerPoints": [
+      "Parse converts a string to a type but throws an exception if the string is invalid",
+      "TryParse attempts the conversion and returns true/false instead of throwing",
+      "TryParse is safer when the input might not be valid",
+      "TryParse outputs the result via an out parameter: int.TryParse(\"5\", out int result)"
+    ]
+  },
+  {
+    "id": "CST010",
+    "question": "What is variable scope?",
+    "competency": "C# Fundamentals",
+    "questionType": "Technical",
+    "difficulty": "Basic",
+    "whyAsked": null,
+    "answerPoints": [
+      "Scope refers to where in the code a variable can be accessed",
+      "A variable declared inside a method is only accessible within that method",
+      "A variable declared inside an if block or loop is only accessible inside that block",
+      "Class-level fields are accessible throughout the class",
+      "Accessing a variable outside its scope causes a compile error"
+    ]
+  },
+  {
+    "id": "CST011",
+    "question": "What is the var keyword used for?",
+    "competency": "C# Fundamentals",
+    "questionType": "Technical",
+    "difficulty": "Basic",
+    "whyAsked": null,
+    "answerPoints": [
+      "var lets the compiler infer the type of a variable from what's assigned to it",
+      "It is still strongly typed — the type is determined at compile time, not runtime",
+      "It can only be used for local variables, not class fields or method parameters",
+      "The variable must be initialized at declaration so the compiler can infer the type"
+    ]
+  },
+  {
+    "id": "CST012",
+    "question": "What is the advantage of using the var keyword?",
+    "competency": "C# Fundamentals",
+    "questionType": "Technical",
+    "difficulty": "Basic",
+    "whyAsked": null,
+    "answerPoints": [
+      "Reduces verbosity, especially with long generic types like Dictionary<string, List<int>>",
+      "Makes code easier to read when the type is obvious from context",
+      "Useful when the exact type is complex or anonymous (e.g. LINQ projections)",
+      "No runtime performance difference — it's purely a compile-time convenience"
+    ]
+  },
+  {
+    "id": "CST013",
+    "question": "Explain the compilation cycle in .NET",
+    "competency": "C# Fundamentals",
+    "questionType": "Technical",
+    "difficulty": "Intermediate",
+    "whyAsked": null,
+    "answerPoints": [
+      "You write C# source code (.cs files)",
+      "The C# compiler (Roslyn) compiles it into Intermediate Language (IL) packaged in an assembly (.dll or .exe)",
+      "When you run the app, the CLR's JIT compiler converts IL into native machine code",
+      "JIT compilation happens at runtime, allowing .NET to optimize for the specific machine",
+      "The native code is then executed by the CPU"
+    ]
+  },
+  {
+    "id": "CST014",
+    "question": "What is an array?",
+    "competency": "C# Fundamentals",
+    "questionType": "Technical",
+    "difficulty": "Basic",
+    "whyAsked": null,
+    "answerPoints": [
+      "An array is a fixed-size collection of elements of the same type",
+      "Elements are accessed by index (zero-based)",
+      "Once created, the size cannot change",
+      "Arrays are reference types even when they hold value types"
+    ]
+  },
+  {
+    "id": "CST015",
+    "question": "What are the disadvantages of arrays?",
+    "competency": "C# Fundamentals",
+    "questionType": "Technical",
+    "difficulty": "Basic",
+    "whyAsked": null,
+    "answerPoints": [
+      "Fixed size — you can't add or remove elements after creation",
+      "Inserting or deleting in the middle requires shifting all other elements manually",
+      "No built-in search, sort, or filter methods (compared to collections)",
+      "For dynamic sizing or richer functionality, List<T> is preferred"
+    ]
+  },
+  {
+    "id": "CST016",
+    "question": "What are collection classes?",
+    "competency": "C# Fundamentals",
+    "questionType": "Technical",
+    "difficulty": "Basic",
+    "whyAsked": null,
+    "answerPoints": [
+      "Collection classes are built-in classes for storing and managing groups of objects",
+      "Unlike arrays, most collections are dynamic — they resize automatically",
+      "They provide built-in methods for adding, removing, searching, and sorting",
+      "Found in System.Collections.Generic namespace"
+    ]
+  },
+  {
+    "id": "CST017",
+    "question": "What are the advantages of collection classes over arrays?",
+    "competency": "C# Fundamentals",
+    "questionType": "Technical",
+    "difficulty": "Basic",
+    "whyAsked": null,
+    "answerPoints": [
+      "Dynamic sizing — they grow and shrink automatically",
+      "Rich built-in methods: Add, Remove, Contains, Sort, etc.",
+      "Generic versions are type-safe and avoid boxing/unboxing",
+      "Specialized collections for different needs: Dictionary for lookups, Queue for FIFO, Stack for LIFO"
+    ]
+  },
+  {
+    "id": "CST018",
+    "question": "Name common collection classes in C#",
+    "competency": "C# Fundamentals",
+    "questionType": "Technical",
+    "difficulty": "Basic",
+    "whyAsked": null,
+    "answerPoints": [
+      "List<T> — dynamic array, most commonly used collection",
+      "Dictionary<TKey, TValue> — key/value pairs, fast lookups",
+      "HashSet<T> — unique values only, fast membership checks",
+      "Queue<T> — first in, first out (FIFO)",
+      "Stack<T> — last in, first out (LIFO)",
+      "LinkedList<T> — efficient insert/delete at any position"
+    ]
+  },
+  {
+    "id": "CST019",
+    "question": "What is a runtime exception?",
+    "competency": "C# Fundamentals",
+    "questionType": "Technical",
+    "difficulty": "Basic",
+    "whyAsked": null,
+    "answerPoints": [
+      "A runtime exception is an error that occurs while the program is running, not during compilation",
+      "The compiler cannot catch these — they only appear when the code actually executes",
+      "Common examples: NullReferenceException, IndexOutOfRangeException, DivideByZeroException",
+      "Runtime exceptions can be caught and handled using try/catch blocks"
+    ]
+  },
+  {
+    "id": "CST020",
+    "question": "Give an example scenario that causes a NullReferenceException",
+    "competency": "C# Fundamentals",
+    "questionType": "Technical",
+    "difficulty": "Basic",
+    "whyAsked": null,
+    "answerPoints": [
+      "Calling a method on an object that hasn't been initialized: Person p = null; p.GetName();",
+      "The compiler won't catch this — it only fails at runtime when the null is dereferenced",
+      "Fix: check for null before using the object, or ensure it's initialized",
+      "Null-conditional operator helps: p?.GetName() returns null instead of throwing"
+    ]
+  },
+  {
+    "id": "CST021",
+    "question": "What is a finally block and why is it needed?",
+    "competency": "C# Fundamentals",
+    "questionType": "Technical",
+    "difficulty": "Basic",
+    "whyAsked": null,
+    "answerPoints": [
+      "The finally block always runs after a try/catch, whether or not an exception occurred",
+      "Used to clean up resources that must be released regardless of success or failure",
+      "Common use: closing a file, database connection, or releasing a lock",
+      "Without finally, an exception thrown before cleanup code runs could leak resources",
+      "The 'using' statement is often a cleaner alternative for IDisposable resources"
+    ]
+  },
+  {
+    "id": "CST022",
+    "question": "What is a struct?",
+    "competency": "C# Fundamentals",
+    "questionType": "Technical",
+    "difficulty": "Intermediate",
+    "whyAsked": null,
+    "answerPoints": [
+      "A struct is a value type that can contain fields, properties, and methods",
+      "Unlike a class, it is copied when assigned — not shared by reference",
+      "Good for small, simple data containers like Point(x, y) or Color(r, g, b)",
+      "Structs cannot inherit from other structs or classes (but can implement interfaces)"
+    ]
+  },
+  {
+    "id": "CST023",
+    "question": "What are the differences between a struct and a class?",
+    "competency": "C# Fundamentals",
+    "questionType": "Technical",
+    "difficulty": "Intermediate",
+    "whyAsked": null,
+    "answerPoints": [
+      "Struct is a value type; class is a reference type",
+      "Structs are copied on assignment; classes share a reference",
+      "Structs typically live on the stack; classes live on the heap",
+      "Classes support inheritance; structs do not",
+      "Use structs for small, immutable data; use classes for complex objects with behavior"
+    ]
+  },
+  {
+    "id": "CST024",
+    "question": "What access specifier should be used for fields in a class or struct?",
+    "competency": "C# Fundamentals",
+    "questionType": "Technical",
+    "difficulty": "Basic",
+    "whyAsked": null,
+    "answerPoints": [
+      "Fields should generally be private — this is encapsulation",
+      "Expose data through public properties instead of public fields",
+      "Private fields are often prefixed with an underscore: private string _name;",
+      "This gives you control over how data is read and written"
+    ]
+  },
+  {
+    "id": "CST025",
+    "question": "What are auto properties?",
+    "competency": "C# Fundamentals",
+    "questionType": "Technical",
+    "difficulty": "Basic",
+    "whyAsked": null,
+    "answerPoints": [
+      "Auto properties let you define a property without writing a backing field manually",
+      "The compiler generates the backing field automatically",
+      "Basic syntax: public string Name { get; set; }",
+      "Read-only: public string Name { get; }",
+      "Init-only (C# 9+): public string Name { get; init; } — settable only during object construction"
+    ]
+  },
+  {
+    "id": "CST026",
+    "question": "What are the four object-oriented principles?",
+    "competency": "OOP",
+    "questionType": "Technical",
+    "difficulty": "Basic",
+    "whyAsked": null,
+    "answerPoints": [
+      "Encapsulation: hiding internal data and exposing only what's needed via public methods/properties",
+      "Inheritance: a class can derive from another class and reuse/extend its behavior",
+      "Polymorphism: the same method call can behave differently depending on the object type",
+      "Abstraction: exposing only relevant details and hiding complexity behind a simple interface"
+    ]
+  },
+  {
+    "id": "CST027",
+    "question": "What is encapsulation?",
+    "competency": "OOP",
+    "questionType": "Technical",
+    "difficulty": "Basic",
+    "whyAsked": null,
+    "answerPoints": [
+      "Encapsulation means hiding the internal state of an object and only exposing what's necessary",
+      "Fields are kept private; access is provided through public properties or methods",
+      "Protects data from being changed in unexpected ways",
+      "Makes code easier to maintain — internals can change without affecting outside code"
+    ]
+  },
+  {
+    "id": "CST028",
+    "question": "What is inheritance?",
+    "competency": "OOP",
+    "questionType": "Technical",
+    "difficulty": "Basic",
+    "whyAsked": null,
+    "answerPoints": [
+      "Inheritance allows a class to derive from another class and reuse its behavior",
+      "The derived class gets all public and protected members of the base class",
+      "The derived class can override base class methods to change behavior",
+      "C# only supports single inheritance for classes — a class can only have one base class",
+      "Use the : symbol: public class Dog : Animal { }"
+    ]
+  },
+  {
+    "id": "CST029",
+    "question": "What is polymorphism?",
+    "competency": "OOP",
+    "questionType": "Technical",
+    "difficulty": "Basic",
+    "whyAsked": null,
+    "answerPoints": [
+      "Polymorphism means the same method call can behave differently depending on the actual object type",
+      "A base class reference can point to a derived class object",
+      "When you call a virtual method, the derived class version runs — not the base class version",
+      "Example: Animal a = new Dog(); a.Speak(); — calls Dog's Speak(), not Animal's",
+      "Enables writing code that works with many types through a common interface"
+    ]
+  },
+  {
+    "id": "CST030",
+    "question": "What is abstraction?",
+    "competency": "OOP",
+    "questionType": "Technical",
+    "difficulty": "Basic",
+    "whyAsked": null,
+    "answerPoints": [
+      "Abstraction means hiding complexity and exposing only what's relevant to the caller",
+      "You interact with an object through a simple interface without knowing how it works internally",
+      "Example: you call car.Start() without knowing about fuel injection, ignition timing, etc.",
+      "Achieved in C# through abstract classes and interfaces"
+    ]
+  },
+  {
+    "id": "CST031",
+    "question": "What keyword is used to call base class functionality from a derived class?",
+    "competency": "OOP",
+    "questionType": "Technical",
+    "difficulty": "Basic",
+    "whyAsked": null,
+    "answerPoints": [
+      "The 'base' keyword is used to access the base class",
+      "Call a base class method: base.MethodName()",
+      "Call a base class constructor: public Dog(string name) : base(name) { }",
+      "Useful when overriding a method but still wanting the base behavior to run"
+    ]
+  },
+  {
+    "id": "CST032",
+    "question": "What is an interface?",
+    "competency": "OOP",
+    "questionType": "Technical",
+    "difficulty": "Intermediate",
+    "whyAsked": null,
+    "answerPoints": [
+      "An interface defines a contract — a set of methods and properties a class must implement",
+      "Interfaces contain no implementation, only signatures (pre C# 8)",
+      "A class can implement multiple interfaces, unlike class inheritance which is single",
+      "Interfaces enable loose coupling — code depends on the interface, not the concrete class",
+      "This is the foundation of dependency injection and testability"
+    ]
+  },
+  {
+    "id": "CST033",
+    "question": "What are the differences between an interface and an abstract class?",
+    "competency": "OOP",
+    "questionType": "Technical",
+    "difficulty": "Intermediate",
+    "whyAsked": null,
+    "answerPoints": [
+      "An abstract class can have implemented methods; an interface traditionally cannot (pre C# 8)",
+      "A class can implement multiple interfaces but can only inherit one abstract class",
+      "Abstract classes can have constructors, fields, and state; interfaces cannot",
+      "Use an abstract class when classes share common implementation",
+      "Use an interface to define a contract for loose coupling and dependency injection"
+    ]
+  },
+  {
+    "id": "CST034",
+    "question": "What is the sealed keyword used for?",
+    "competency": "OOP",
+    "questionType": "Technical",
+    "difficulty": "Intermediate",
+    "whyAsked": null,
+    "answerPoints": [
+      "sealed on a class prevents it from being inherited",
+      "sealed on a method override prevents further overriding in derived classes",
+      "Use it when you want to lock down behavior and prevent unintended extension",
+      "string is an example of a sealed class in .NET"
+    ]
+  },
+  {
+    "id": "CST035",
+    "question": "What is function overloading?",
+    "competency": "OOP",
+    "questionType": "Technical",
+    "difficulty": "Intermediate",
+    "whyAsked": null,
+    "answerPoints": [
+      "Overloading means defining multiple methods with the same name but different parameters",
+      "The compiler picks the right version based on the arguments passed",
+      "Parameters must differ in type, number, or order — return type alone is not enough",
+      "Example: Console.WriteLine() has many overloads accepting string, int, object, etc."
+    ]
+  },
+  {
+    "id": "CST036",
+    "question": "What is operator overloading?",
+    "competency": "OOP",
+    "questionType": "Technical",
+    "difficulty": "Advanced",
+    "whyAsked": null,
+    "answerPoints": [
+      "Operator overloading lets you define custom behavior for operators like +, -, ==, > on your own types",
+      "Defined using the 'operator' keyword in a class or struct",
+      "Example: a Vector class could overload + to add two vectors component by component",
+      "Not all operators can be overloaded — =, &&, ||, ?? cannot",
+      "Use sparingly — non-obvious operator overloads make code harder to read"
+    ]
+  },
+  {
+    "id": "CST037",
+    "question": "What are delegates?",
+    "competency": "C# Advanced",
+    "questionType": "Technical",
+    "difficulty": "Advanced",
+    "whyAsked": null,
+    "answerPoints": [
+      "A delegate is a type that holds a reference to a method with a specific signature",
+      "Think of it as a type-safe function pointer",
+      "Delegates allow methods to be passed as parameters or stored as variables",
+      "They are the foundation for events and LINQ in C#",
+      "Common built-in delegates: Action (no return), Func (has return), Predicate (returns bool)"
+    ]
+  },
+  {
+    "id": "CST038",
+    "question": "What are events in C#?",
+    "competency": "C# Advanced",
+    "questionType": "Technical",
+    "difficulty": "Advanced",
+    "whyAsked": null,
+    "answerPoints": [
+      "An event is a way for a class to notify other classes when something happens",
+      "Events are based on delegates — the event defines the delegate signature subscribers must match",
+      "A class subscribes using += and unsubscribes with -=",
+      "To raise an event: MyEvent?.Invoke(this, args)",
+      "Common pattern: UI button clicks, data change notifications"
+    ]
+  },
+  {
+    "id": "CST039",
+    "question": "How do generics improve performance?",
+    "competency": "C# Advanced",
+    "questionType": "Technical",
+    "difficulty": "Advanced",
+    "whyAsked": null,
+    "answerPoints": [
+      "Before generics, collections stored objects as 'object' type, requiring boxing/unboxing for value types",
+      "Boxing wraps a value type in an object on the heap — slow and creates GC pressure",
+      "Generics avoid boxing by generating type-specific code at compile/JIT time",
+      "Example: List<int> is much more efficient than ArrayList storing ints as objects",
+      "Generics also provide compile-time type safety — mistakes are caught before runtime"
+    ]
+  },
+  {
+    "id": "CST040",
+    "question": "What is the difference between a .dll and an .exe?",
+    "competency": "C# Advanced",
+    "questionType": "Technical",
+    "difficulty": "Advanced",
+    "whyAsked": null,
+    "answerPoints": [
+      "An .exe is an executable — it has an entry point (Main method) and can be run directly",
+      "A .dll is a library — it contains reusable code but cannot run on its own",
+      "An .exe typically references one or more .dlls",
+      "In .NET, both are assemblies containing IL code — the difference is the entry point and how they're used"
+    ]
+  },
+  {
+    "id": "CST041",
+    "question": "What is multitasking in .NET?",
+    "competency": "C# Advanced",
+    "questionType": "Technical",
+    "difficulty": "Advanced",
+    "whyAsked": null,
+    "answerPoints": [
+      "Multitasking is the ability to run multiple operations concurrently",
+      "In .NET, the Task class (System.Threading.Tasks) represents an asynchronous operation",
+      "The ThreadPool manages the threads that execute tasks behind the scenes",
+      "Tasks can be awaited using the await keyword, which pauses the method without blocking the thread"
+    ]
+  },
+  {
+    "id": "CST042",
+    "question": "What is the purpose of async and await?",
+    "competency": "C# Advanced",
+    "questionType": "Technical",
+    "difficulty": "Advanced",
+    "whyAsked": null,
+    "answerPoints": [
+      "async marks a method as asynchronous — it can contain await expressions",
+      "await pauses the method until the awaited task completes, without blocking the thread",
+      "This frees the thread to do other work while waiting (e.g. for a database call or HTTP request)",
+      "The method resumes after the awaited task finishes",
+      "async methods typically return Task or Task<T> instead of void or a value type"
+    ]
+  },
+  {
+    "id": "CST043",
+    "question": "What is Reflection in .NET?",
+    "competency": "C# Advanced",
+    "questionType": "Technical",
+    "difficulty": "Advanced",
+    "whyAsked": null,
+    "answerPoints": [
+      "Reflection allows you to inspect and interact with type metadata at runtime",
+      "You can discover the methods, properties, fields, and attributes of any type",
+      "You can also create instances and invoke methods dynamically",
+      "Useful for serialization, dependency injection frameworks, and plugin architectures",
+      "Key classes: Type, MethodInfo, PropertyInfo, Assembly (all in System.Reflection)",
+      "Downside: slower than direct code and loses compile-time type safety"
+    ]
+  },
+  {
+    "id": "CST044",
+    "question": "What is deferred query execution in LINQ?",
+    "competency": "C# Advanced",
+    "questionType": "Technical",
+    "difficulty": "Advanced",
+    "whyAsked": null,
+    "answerPoints": [
+      "Deferred execution means a LINQ query is not run when it's defined — it runs when you iterate over it",
+      "The query is just a description of what to do, not the result",
+      "This allows queries to be composed and modified before execution",
+      "Execution is triggered by iterating (foreach) or calling ToList(), First(), Count(), etc."
+    ]
+  },
+  {
+    "id": "CST045",
+    "question": "What is forced query execution in LINQ and how do you achieve it?",
+    "competency": "C# Advanced",
+    "questionType": "Technical",
+    "difficulty": "Advanced",
+    "whyAsked": null,
+    "answerPoints": [
+      "Forced execution means running the query immediately and storing the result",
+      "Achieved by calling ToList(), ToArray(), ToDictionary(), First(), Count(), etc.",
+      "The result is a snapshot — changes to the source after this point are not reflected",
+      "Use forced execution when you need to iterate multiple times or pass a concrete list around"
+    ]
+  },
+  {
+    "id": "CST046",
+    "question": "What are extension methods?",
+    "competency": "C# Advanced",
+    "questionType": "Technical",
+    "difficulty": "Advanced",
+    "whyAsked": null,
+    "answerPoints": [
+      "Extension methods let you add new methods to an existing type without modifying or inheriting from it",
+      "Must be in a static class and must be static methods",
+      "The first parameter uses the 'this' keyword followed by the type being extended",
+      "They appear as instance methods on the type when the namespace is imported",
+      "LINQ is entirely built on extension methods on IEnumerable<T>"
+    ]
+  },
+  {
+    "id": "CST047",
+    "question": "What is Entity Framework?",
+    "competency": "C# Advanced",
+    "questionType": "Technical",
+    "difficulty": "Advanced",
+    "whyAsked": null,
+    "answerPoints": [
+      "Entity Framework (EF) is an ORM — Object Relational Mapper — for .NET",
+      "It lets you work with a database using C# objects instead of writing raw SQL",
+      "Supports LINQ queries that get translated to SQL automatically",
+      "Code-first approach: database schema is generated from your C# classes",
+      "EF Core is the modern cross-platform version"
+    ]
+  },
+  {
+    "id": "CST048",
+    "question": "What are the advantages of Entity Framework?",
+    "competency": "C# Advanced",
+    "questionType": "Technical",
+    "difficulty": "Advanced",
+    "whyAsked": null,
+    "answerPoints": [
+      "Reduces boilerplate data access code — no manual SQL for basic CRUD",
+      "Type-safe queries with LINQ instead of raw SQL strings",
+      "Database schema can be generated and migrated from code",
+      "Supports multiple databases with minimal code changes",
+      "Change tracking automatically detects which objects need to be saved"
+    ]
+  },
+  {
+    "id": "CST049",
+    "question": "What is implicit type conversion?",
+    "competency": "C# Fundamentals",
+    "questionType": "Technical",
+    "difficulty": "Intermediate",
+    "whyAsked": null,
+    "answerPoints": [
+      "Implicit conversion happens automatically when there is no risk of data loss",
+      "Example: int to long — a long can always hold an int value",
+      "The compiler handles it without any extra syntax",
+      "Other examples: float to double, int to float"
+    ]
+  },
+  {
+    "id": "CST050",
+    "question": "What is explicit type conversion?",
+    "competency": "C# Fundamentals",
+    "questionType": "Technical",
+    "difficulty": "Intermediate",
+    "whyAsked": null,
+    "answerPoints": [
+      "Explicit conversion is required when data loss is possible",
+      "You must write a cast to tell the compiler you accept the risk",
+      "Syntax: int x = (int)myDouble; — decimal portion is truncated",
+      "If a cast fails at runtime it throws an InvalidCastException",
+      "Use 'as' for safe reference type casting — returns null instead of throwing"
+    ]
+  },
+  {
+    "id": "CST051",
+    "question": "What is the advantage of StringBuilder over string concatenation?",
+    "competency": "C# Intermediate",
+    "questionType": "Technical",
+    "difficulty": "Intermediate",
+    "whyAsked": null,
+    "answerPoints": [
+      "Strings in C# are immutable — every + concatenation creates a new string object",
+      "In a loop, this creates many short-lived objects and GC pressure",
+      "StringBuilder maintains a mutable buffer and only allocates when needed",
+      "For building strings in loops or with many appends, StringBuilder is significantly faster",
+      "For simple one-or-two concatenations, + or string interpolation is fine"
+    ]
+  },
+  {
+    "id": "CST052",
+    "question": "What is the lock keyword used for?",
+    "competency": "C# Advanced",
+    "questionType": "Technical",
+    "difficulty": "Advanced",
+    "whyAsked": null,
+    "answerPoints": [
+      "lock ensures only one thread can execute a block of code at a time",
+      "Prevents race conditions when multiple threads access shared data",
+      "The lock object should be private and dedicated — typically a readonly object field",
+      "Overuse of lock can cause deadlocks or reduce performance"
+    ]
+  },
+  {
+    "id": "CST053",
+    "question": "What are ref parameters?",
+    "competency": "C# Advanced",
+    "questionType": "Technical",
+    "difficulty": "Advanced",
+    "whyAsked": null,
+    "answerPoints": [
+      "ref allows a method to modify the caller's variable directly",
+      "The variable must be initialized before being passed in",
+      "Both the caller and the method must use the ref keyword",
+      "Less common in modern C# where return values and tuples are preferred"
+    ]
+  },
+  {
+    "id": "CST054",
+    "question": "What are out parameters?",
+    "competency": "C# Advanced",
+    "questionType": "Technical",
+    "difficulty": "Advanced",
+    "whyAsked": null,
+    "answerPoints": [
+      "out allows a method to return additional values through parameters",
+      "The variable does not need to be initialized before being passed in",
+      "The method must assign the out parameter before returning",
+      "Most common use: TryParse pattern — bool success = int.TryParse(s, out int result)"
+    ]
+  },
+  {
+    "id": "CST055",
+    "question": "What are optional parameters?",
+    "competency": "C# Intermediate",
+    "questionType": "Technical",
+    "difficulty": "Intermediate",
+    "whyAsked": null,
+    "answerPoints": [
+      "Optional parameters have a default value and don't need to be passed by the caller",
+      "Declared by assigning a default in the method signature: void Greet(string name = \"World\")",
+      "Optional parameters must come after required parameters",
+      "Callers can omit them or pass a value to override the default"
+    ]
+  },
+  {
+    "id": "CST056",
+    "question": "What are named parameters?",
+    "competency": "C# Intermediate",
+    "questionType": "Technical",
+    "difficulty": "Intermediate",
+    "whyAsked": null,
+    "answerPoints": [
+      "Named parameters let you specify arguments by parameter name instead of position",
+      "Syntax: Greet(name: \"Alice\", greeting: \"Hello\")",
+      "Improves readability when a method has many parameters",
+      "Allows you to pass optional parameters out of order"
+    ]
+  },
+  {
+    "id": "CST057",
+    "question": "What is a data structure?",
+    "competency": "Data Structures",
+    "questionType": "Technical",
+    "difficulty": "Basic",
+    "whyAsked": null,
+    "answerPoints": [
+      "A data structure is a way of organizing and storing data so it can be accessed and modified efficiently",
+      "Different structures are optimized for different operations — searching, inserting, sorting, etc.",
+      "Choosing the right data structure is a key part of writing efficient code",
+      "Examples: array, list, stack, queue, dictionary, tree, graph"
+    ]
+  },
+  {
+    "id": "CST058",
+    "question": "What is a stack data structure?",
+    "competency": "Data Structures",
+    "questionType": "Technical",
+    "difficulty": "Basic",
+    "whyAsked": null,
+    "answerPoints": [
+      "A stack is a Last In, First Out (LIFO) structure",
+      "The last item added is the first one removed",
+      "Main operations: Push (add to top), Pop (remove from top), Peek (view top without removing)",
+      "Real-world analogy: a stack of plates — you add and remove from the top",
+      "Common uses: undo history, call stack, expression parsing"
+    ]
+  },
+  {
+    "id": "CST059",
+    "question": "What is a queue data structure?",
+    "competency": "Data Structures",
+    "questionType": "Technical",
+    "difficulty": "Basic",
+    "whyAsked": null,
+    "answerPoints": [
+      "A queue is a First In, First Out (FIFO) structure",
+      "The first item added is the first one removed",
+      "Main operations: Enqueue (add to back), Dequeue (remove from front), Peek (view front)",
+      "Real-world analogy: a line at a store — first person in line is first served",
+      "Common uses: task scheduling, message queues, breadth-first search"
+    ]
+  },
+  {
+    "id": "CST060",
+    "question": "What is a dictionary data structure?",
+    "competency": "Data Structures",
+    "questionType": "Technical",
+    "difficulty": "Basic",
+    "whyAsked": null,
+    "answerPoints": [
+      "A dictionary stores data as key/value pairs",
+      "Each key must be unique; values can be duplicated",
+      "Lookup by key is very fast — O(1) average time",
+      "In C#: Dictionary<TKey, TValue>",
+      "Common uses: caching, lookups by ID, counting occurrences"
+    ]
+  },
+  {
+    "id": "CST061",
+    "question": "What is a linked list?",
+    "competency": "Data Structures",
+    "questionType": "Technical",
+    "difficulty": "Intermediate",
+    "whyAsked": null,
+    "answerPoints": [
+      "A linked list is a collection where each element (node) holds data and a reference to the next node",
+      "Unlike arrays, elements are not stored in contiguous memory",
+      "Inserting or deleting at any position is efficient — just update the references",
+      "Random access is slow — you must traverse from the start to reach a specific index",
+      "In C#: LinkedList<T>"
+    ]
+  },
+  {
+    "id": "CST062",
+    "question": "What is a hash set?",
+    "competency": "Data Structures",
+    "questionType": "Technical",
+    "difficulty": "Intermediate",
+    "whyAsked": null,
+    "answerPoints": [
+      "A hash set stores unique values only — duplicates are automatically ignored",
+      "Checking whether a value exists is very fast — O(1) average",
+      "No guaranteed order of elements",
+      "In C#: HashSet<T>",
+      "Common uses: deduplication, fast membership checks"
+    ]
+  },
+  {
+    "id": "CST063",
+    "question": "What is a binary tree?",
+    "competency": "Data Structures",
+    "questionType": "Technical",
+    "difficulty": "Advanced",
+    "whyAsked": null,
+    "answerPoints": [
+      "A binary tree is a structure where each node has at most two children: left and right",
+      "The topmost node is called the root",
+      "Leaf nodes have no children",
+      "Binary Search Trees (BST) keep left children smaller and right children larger than the parent",
+      "BST lookup, insert, and delete are O(log n) on average for balanced trees"
+    ]
+  },
+  {
+    "id": "CST064",
+    "question": "What is Big O notation?",
+    "competency": "Data Structures",
+    "questionType": "Technical",
+    "difficulty": "Intermediate",
+    "whyAsked": null,
+    "answerPoints": [
+      "Big O notation describes how the performance of an algorithm scales with input size",
+      "It describes the worst-case scenario",
+      "O(1) — constant time: performance doesn't change regardless of input size",
+      "O(n) — linear time: performance grows proportionally with input size",
+      "O(n²) — quadratic: performance grows with the square of input size (e.g. nested loops)",
+      "O(log n) — logarithmic: performance grows slowly, common in search trees and binary search"
+    ]
+  },
+  {
+    "id": "CST065",
+    "question": "What is the time complexity of common List<T> operations?",
+    "competency": "Data Structures",
+    "questionType": "Technical",
+    "difficulty": "Advanced",
+    "whyAsked": null,
+    "answerPoints": [
+      "Add to end: O(1) amortized — occasionally resizes the internal array",
+      "Insert at index: O(n) — must shift all elements after the insertion point",
+      "Remove at index: O(n) — must shift elements to fill the gap",
+      "Access by index: O(1) — direct memory access",
+      "Search (Contains): O(n) — must scan the whole list in the worst case"
+    ]
+  },
+  {
+    "id": "CST066",
+    "question": "What is the time complexity of Dictionary<TKey,TValue> operations?",
+    "competency": "Data Structures",
+    "questionType": "Technical",
+    "difficulty": "Advanced",
+    "whyAsked": null,
+    "answerPoints": [
+      "Lookup by key: O(1) average — uses a hash function to find the bucket",
+      "Insert: O(1) average",
+      "Delete: O(1) average",
+      "Worst case is O(n) if many keys hash to the same bucket (hash collision)",
+      "In practice, .NET's Dictionary implementation handles collisions well"
+    ]
+  },
+  {
+    "id": "CST067",
+    "question": "What is the difference between a shallow copy and a deep copy?",
+    "competency": "C# Intermediate",
+    "questionType": "Technical",
+    "difficulty": "Intermediate",
+    "whyAsked": null,
+    "answerPoints": [
+      "A shallow copy copies the object but not the objects it references — nested objects are shared",
+      "A deep copy copies the object and all objects it references — fully independent",
+      "With a shallow copy, modifying a nested object in the copy affects the original too",
+      "Deep copies are more expensive but safer when you need true independence",
+      "In C#, MemberwiseClone() produces a shallow copy"
+    ]
+  },
+  {
+    "id": "CST068",
+    "question": "What is boxing and unboxing?",
+    "competency": "C# Intermediate",
+    "questionType": "Technical",
+    "difficulty": "Intermediate",
+    "whyAsked": null,
+    "answerPoints": [
+      "Boxing is wrapping a value type in an object reference so it can be stored on the heap",
+      "Example: object o = 42; — the int 42 is boxed into an object",
+      "Unboxing is extracting the value type back out: int x = (int)o;",
+      "Boxing/unboxing has a performance cost — heap allocation and casting",
+      "Generics were introduced largely to avoid boxing in collections"
+    ]
+  }
+]

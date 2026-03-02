@@ -22,8 +22,10 @@ namespace MiniProject_Take1
 
             // load questions
             var interviewService = app.Services.GetRequiredService<InterviewService>();
-            var questionsPath = Path.Combine(app.Environment.ContentRootPath, "Data", "Seed", "Top20Behavioral.json");
-            await interviewService.LoadQuestionsAsync(questionsPath);
+            await interviewService.LoadQuestionsAsync(
+                "Data/Seed/Behavioral.json",
+                "Data/Seed/CSharp_technical.json",
+                "Data/Seed/CSharp_coding.json");
 
             // Configure the HTTP request pipeline.
             if (!app.Environment.IsDevelopment())

@@ -88,6 +88,17 @@
     </div>
 
 </div>
+<div style="border:1px solid #337ab7; padding:10px; margin-bottom:20px; display:flex; align-items:center; gap:20px;">
+    <div>
+        <strong>Technical &amp; Coding Review</strong>
+        <p style="font-size:0.85em; margin:4px 0;">@_dueForReview cards due for review · @_newForReview new cards available</p>
+    </div>
+    <div style="display:flex; align-items:center; gap:8px;">
+        <label style="font-size:0.85em;">New cards:</label>
+        <input type="number" min="0" max="20" @bind="_newCardCount" style="width:50px;" />
+    </div>
+    <button @onclick='() => Navigation.NavigateTo($"/technical?newCards={_newCardCount}")'>Start Session</button>
+</div>
 
 <hr />
 <h4>Recommended Next Steps</h4>
@@ -136,6 +147,9 @@
 
     private int _wipIndex = 0;
     private int _solidIndex = 0;
+    private int _dueForReview = 0;
+    private int _newForReview = 0;
+    private int _newCardCount = 5;
 
     private InterviewResponse? _mostUrgent;
     private InterviewResponse? _needsWork;
@@ -148,7 +162,17 @@
         var responses = InterviewService.GetAllResponses();
         var answeredIds = responses.Select(r => r.QuestionId).ToHashSet();
 
-        _todo = _questions.Where(q => !answeredIds.Contains(q.Id)).ToList();
+        _todo = _questions
+                .Where(q => !answeredIds.Contains(q.Id))
+                .Where(q => q.QuestionType != QuestionType.Technical && q.QuestionType != QuestionType.Coding)
+                .OrderBy(q => q.QuestionType switch
+                {
+                    QuestionType.Narrative => 0,
+                    QuestionType.Behavioral => 1,
+                    QuestionType.Situational => 2,
+                    _ => 3
+                })
+                .ToList();
         _wip = responses.Where(r => r.Status == ItemStatus.Wip)
                         .OrderBy(r => r.Deadline ?? DateTime.MaxValue)
                         .ThenBy(r => GetScore(r)).ToList();
@@ -156,6 +180,8 @@
                           .OrderBy(r => r.LastEdited).ToList();
         _mastered = responses.Where(r => r.Status == ItemStatus.Mastered)
                              .OrderByDescending(r => r.LastEdited).ToList();
+        _dueForReview = InterviewService.GetDueForReview().Count;
+        _newForReview = InterviewService.GetNewForReview().Count;
 
         ComputeRecommendations(responses);
     }

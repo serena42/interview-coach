@@ -17,7 +17,6 @@ namespace MiniProject_Take1.Services
         public SessionService(InterviewService interviewService)
         {
             _interviewService = interviewService;
-            _interviewService.RegisterAutoSave(AutoSave);
         }
 
         private JsonSerializerOptions GetOptions() => new JsonSerializerOptions

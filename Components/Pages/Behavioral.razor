@@ -4,6 +4,7 @@
 @inject InterviewService InterviewService
 @inject RubricService RubricService
 @inject NavigationManager Navigation
+@inject SessionService SessionService
 @using MiniProject_Take1.Services
 @using MiniProject_Take1.Domain.Interview
 @using MiniProject_Take1.Domain.Enums
@@ -461,6 +462,7 @@
             if (string.IsNullOrEmpty(_freeformResponse.Id)) InterviewService.SaveResponse(_freeformResponse);
             else InterviewService.UpdateResponse(_freeformResponse);
         }
+        SessionService.AutoSave(); // ensure this gets saved in the session for dashboard display
         _step = 1;
         _savedConfirmation = true;
         StateHasChanged();
@@ -483,6 +485,7 @@
             _starResponse.TimeHistory.Add(attempt);
             InterviewService.UpdateResponse(_starResponse);
         }
+        SessionService.AutoSave(); // ensure this gets saved in the session for dashboard display
         _practiceText = "";
         _elapsedSeconds = 0;
         _savedConfirmation = true;

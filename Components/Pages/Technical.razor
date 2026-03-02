@@ -2,6 +2,7 @@
 @rendermode InteractiveServer
 @inject InterviewService InterviewService
 @inject NavigationManager Navigation
+@inject SessionService SessionService
 @using MiniProject_Take1.Services
 @using MiniProject_Take1.Domain.Interview
 @using MiniProject_Take1.Domain.Enums
@@ -153,6 +154,7 @@ else
         }
 
         InterviewService.UpdateReviewSchedule(response, rating);
+        SessionService.AutoSave(); // ensure this gets saved in the session for dashboard display
     }
 
     private void NextCard()

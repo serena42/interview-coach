@@ -9,12 +9,6 @@ namespace MiniProject_Take1.Services
     {
         private List<InterviewQuestion> _questions = new();
         private List<InterviewResponse> _responses = new();
-        private Action? _onSave;
-
-        public void RegisterAutoSave(Action onSave)
-        {
-            _onSave = onSave;
-        }
 
         public async Task LoadQuestionsAsync(params string[] jsonPaths)
         {
@@ -118,14 +112,12 @@ namespace MiniProject_Take1.Services
             response.LastEdited = DateTime.UtcNow;
             UpdateStatus(response);
             _responses.Add(response);
-            _onSave?.Invoke();
         }
 
         public void UpdateResponse(InterviewResponse response)
         {
             response.LastEdited = DateTime.UtcNow;
             UpdateStatus(response);
-            _onSave?.Invoke();
         }
 
         public List<InterviewResponse> GetAllResponses() => _responses;

@@ -1,4 +1,556 @@
 ﻿@page "/behavioral"
+@page "/behavioral/{ResponseId}"
 @rendermode InteractiveServer
-<h3>Behavioral</h3>
-<p>STAR and Narrative practice coming soon.</p>
+@inject InterviewService InterviewService
+@inject RubricService RubricService
+@inject NavigationManager Navigation
+@using MiniProject_Take1.Services
+@using MiniProject_Take1.Domain.Interview
+@using MiniProject_Take1.Domain.Enums
+@implements IDisposable //needed to clean up the timer thread
+
+<style>
+    .toggle-container {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 16px;
+    }
+
+    .toggle-switch {
+        position: relative;
+        width: 52px;
+        height: 26px;
+    }
+
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+    .toggle-slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #5cb85c;
+        border-radius: 26px;
+        transition: .3s;
+    }
+
+        .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 20px;
+            width: 20px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            border-radius: 50%;
+            transition: .3s;
+        }
+
+    input:checked + .toggle-slider {
+        background-color: #337ab7;
+    }
+
+        input:checked + .toggle-slider:before {
+            transform: translateX(26px);
+        }
+
+    .timer-bar {
+        height: 12px;
+        border-radius: 6px;
+        transition: background-color 0.5s;
+        margin: 8px 0;
+    }
+</style>
+
+<div style="display:flex; gap:20px;">
+
+    <!-- Left panel -->
+    <div style="width:200px; min-width:200px; border-right:1px solid #ccc; padding-right:10px;">
+        <h5>Questions</h5>
+        <div style="max-height:80vh; overflow-y:auto;">
+            @foreach (var group in GroupedQuestions())
+            {
+                <div style="font-size:0.7em; font-weight:bold; color:#888; margin-top:10px; margin-bottom:4px; text-transform:uppercase;">@group.Key</div>
+                @foreach (var q in group)
+                {
+                    var isActive = _currentQuestion?.Id == q.Id;
+                    <div style="padding:4px 6px; font-size:0.78em; cursor:pointer; background:@(isActive ? "#e0f0ff" : "transparent"); border-bottom:1px solid #eee;"
+                         @onclick="() => LoadQuestionFromList(q)">
+                        @q.Competency
+                    </div>
+                }
+            }
+        </div>
+    </div>
+
+    <!-- Right panel -->
+    <div style="flex:1;">
+        @if (_savedConfirmation)
+        {
+            <div style="background:#dff0d8; border:1px solid #bce8b0; color:#3c763d; padding:8px 12px; border-radius:4px; margin-bottom:10px; font-size:0.85em;">
+                ✓ Saved successfully
+            </div>
+        }
+        @if (_currentQuestion == null)
+        {
+            <p>No question loaded.</p>
+        }
+        else
+        {
+            <!-- Toggle -->
+            <div class="toggle-container">
+                <span style="font-size:0.9em; color:@(_practiceMode ? "#888" : "#333")">Develop</span>
+                <label class="toggle-switch">
+                    <input type="checkbox" checked="@_practiceMode" @onchange="ToggleMode" />
+                    <span class="toggle-slider"></span>
+                </label>
+                <span style="font-size:0.9em; color:@(_practiceMode ? "#333" : "#888")">Practice</span>
+            </div>
+
+            @if (!_practiceMode)
+            {
+                <!-- DEVELOP MODE -->
+                @if (_isSTAR)
+                {
+                    @if (_step == 1)
+                    {
+                        <h5>@_currentQuestion.Question</h5>
+                        <p style="color:#888; font-size:0.85em;">@_currentQuestion.Competency</p>
+                        <div style="margin-bottom:10px;">
+                            <label><strong>Situation</strong></label>
+                            <p style="font-size:0.8em; color:#666;">Set the scene — where were you, what was happening?</p>
+                            <textarea value="@(_starResponse?.Situation ?? "")"
+                                      @onchange="SetSituation"
+                                      rows="3" style="width:100%;"></textarea>
+                        </div>
+                        <div style="margin-bottom:10px;">
+                            <label><strong>Task</strong></label>
+                            <p style="font-size:0.8em; color:#666;">What were you responsible for in this situation?</p>
+                            <textarea value="@(_starResponse?.Task ?? "")"
+                                      @onchange="SetTask"
+                                      rows="3" style="width:100%;"></textarea>
+                        </div>
+                        <div style="margin-bottom:10px;">
+                            <label><strong>Action</strong></label>
+                            <p style="font-size:0.8em; color:#666;">What did YOU specifically do? Use 'I' not 'we'.</p>
+                            <textarea value="@(_starResponse?.Action ?? "")"
+                                      @onchange="SetAction"
+                                      rows="3" style="width:100%;"></textarea>
+                        </div>
+                        <div style="margin-bottom:10px;">
+                            <label><strong>Result</strong></label>
+                            <p style="font-size:0.8em; color:#666;">What was the outcome? Try to quantify it.</p>
+                            <textarea value="@(_starResponse?.Result ?? "")"
+                                      @onchange="SetResult"
+                                      rows="3" style="width:100%;"></textarea>
+                        </div>
+                        <button @onclick="() => _step = 2">Next: Review Situation</button>
+                    }
+                    else if (_step >= 2 && _step <= 5)
+                    {
+                        var sectionName = _step switch { 2 => "Situation", 3 => "Task", 4 => "Action", 5 => "Result", _ => "" };
+                        var rubric = _rubrics.FirstOrDefault(r => r.Section == sectionName);
+
+                        <h5>Review: @sectionName</h5>
+                        <p style="font-size:0.85em; color:#666; font-style:italic;">@rubric?.Guidance</p>
+                        <p style="font-size:0.8em;">@rubric?.GuidanceDetail</p>
+
+                        <textarea value="@GetFieldValue(sectionName)"
+                                  @onchange="e => SetField(sectionName, e.Value?.ToString())"
+                                  rows="4" style="width:100%; margin-bottom:8px;"></textarea>
+
+                        <label style="font-size:0.85em;">Score: @GetSectionScore(sectionName)/10</label>
+                        <input type="range" min="1" max="10" step="0.5"
+                               value="@GetSectionScore(sectionName)"
+                               @onchange="e => SetSectionScore(sectionName, e.Value?.ToString())"
+                               style="width:100%;" />
+
+                        <div style="display:flex; gap:10px; margin-top:10px;">
+                            <button @onclick="() => _step--">◀ Back</button>
+                            @if (_step < 5)
+                            {
+                                <button @onclick="() => _step++">Next ▶</button>
+                            }
+                            else
+                            {
+                                <button @onclick="SaveAndFinish">Save & Finish</button>
+                            }
+                        </div>
+                    }
+                }
+                else
+                {
+                    <!-- Narrative develop -->
+                    @if (_step == 1)
+                    {
+                        <h5>@_currentQuestion.Question</h5>
+                        <p style="color:#888; font-size:0.85em;">@_currentQuestion.Competency</p>
+                        <textarea value="@(_freeformResponse?.Content ?? "")"
+                                  @onchange="e => SetFreeformText(e.Value?.ToString())"
+                                  rows="6" style="width:100%;"></textarea>
+                        <div style="margin-top:10px;">
+                            <button @onclick="() => _step = 2">Next: Why This Is Asked</button>
+                        </div>
+                    }
+                    else if (_step == 2)
+                    {
+                        <h5>Why Interviewers Ask This</h5>
+                        <div style="background:#f9f9f9; border-left:3px solid #337ab7; padding:10px; margin-bottom:12px; font-size:0.9em;">
+                            @_currentQuestion.WhyAsked
+                        </div>
+                        <h6>Your Answer</h6>
+                        <textarea value="@(_freeformResponse?.Content ?? "")"
+                                  @onchange="e => SetFreeformText(e.Value?.ToString())"
+                                  rows="6" style="width:100%;"></textarea>
+                        <div style="margin-top:10px;">
+                            <label style="font-size:0.85em;">Score: @(_freeformResponse?.Score ?? 0)/10</label>
+                            <input type="range" min="1" max="10" step="0.5"
+                                   value="@(_freeformResponse?.Score ?? 0)"
+                                   @onchange="e => SetFreeformScore(e.Value?.ToString())"
+                                   style="width:100%;" />
+                        </div>
+                        <div style="margin-top:10px; display:flex; gap:10px;">
+                            <button @onclick="() => _step = 1">◀ Back</button>
+                            <button @onclick="SaveAndFinish">Save & Finish</button>
+                        </div>
+                    }
+                }
+            }
+            else
+            {
+                <!-- PRACTICE MODE -->
+                <p style="color:#888; font-size:0.85em;">@_currentQuestion.Competency</p>
+                @if (_showQuestion)
+                {
+                    <h5>@_currentQuestion.Question</h5>
+                }
+                else
+                {
+                    <p style="color:#aaa; font-style:italic;">[Question hidden]</p>
+                }
+                <button @onclick="() => _showQuestion = !_showQuestion" style="font-size:0.8em; margin-bottom:12px;">
+                    @(_showQuestion ? "Hide Question" : "Reveal Question")
+                </button>
+
+                <!-- Timer display -->
+                <div style="display:flex; justify-content:center; margin:16px 0;">
+                    <div style="
+                width:140px; height:140px; border-radius:50%;
+                background:@GetTimerColor();
+                display:flex; align-items:center; justify-content:center;
+                transition: background-color 0.5s;">
+                        <span style="font-size:2em; font-weight:bold; color:white;">
+                            @FormatTime(_elapsedSeconds)
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Time markers -->
+                <div style="display:flex; justify-content:center; gap:20px; font-size:0.75em; color:#888; margin-bottom:12px;">
+                    @if (_isSTAR)
+                    {
+                        <span style="color:#5cb85c;">● 2:00 min</span>
+                        <span style="color:#f0ad4e;">● 2:30 warn</span>
+                        <span style="color:#d9534f;">● 3:00 stop</span>
+                    }
+                    else
+                    {
+                        <span style="color:#5cb85c;">● 0:30 min</span>
+                        <span style="color:#f0ad4e;">● 0:45 warn</span>
+                        <span style="color:#d9534f;">● 1:00 stop</span>
+                    }
+                </div>
+                <div style="text-align:center; margin-bottom:12px;">
+                    <button @onclick="StartStopTimer" style="font-size:1em; padding:6px 20px;">
+                        @(_timerRunning ? "⏹ Stop" : "▶ Start")
+                    </button>
+                    <button @onclick="ResetTimer" style="font-size:0.85em; margin-left:8px;">Reset</button>
+                </div>
+                <div style="margin-top:16px;">
+                    <label style="font-size:0.85em; color:#555;">Practice notes (optional)</label>
+                    <textarea value="@_practiceText"
+                              @onchange="e => _practiceText = e.Value?.ToString() ?? string.Empty"
+                              rows="4" style="width:100%; margin-top:4px;"></textarea>
+                    <button @onclick="SavePracticeAttempt" style="margin-top:8px;">Save Attempt</button>
+                </div>
+            }
+        }
+    </div>
+</div>
+
+@code {
+    private void SetSituation(ChangeEventArgs e) => SetField("Situation", e.Value?.ToString());
+    private void SetTask(ChangeEventArgs e) => SetField("Task", e.Value?.ToString());
+    private void SetAction(ChangeEventArgs e) => SetField("Action", e.Value?.ToString());
+    private void SetResult(ChangeEventArgs e) => SetField("Result", e.Value?.ToString());
+    [Parameter] public string ResponseId { get; set; }
+    [SupplyParameterFromQuery] public string? QuestionId { get; set; }
+
+    private List<InterviewQuestion> _questions = new();
+    private List<StarRubric> _rubrics = new();
+    private InterviewQuestion? _currentQuestion;
+    private StarResponse? _starResponse;
+    private FreeformResponse? _freeformResponse; 
+
+    private bool _practiceMode = false;
+    private bool _isSTAR = true;
+    private int _step = 1;
+    private bool _savedConfirmation = false;
+
+    private bool _showQuestion = true;
+    private string _practiceText = "";
+    private string _timerMode = "freerun";
+    private int _countdownMinutes = 3;
+    private int _elapsedSeconds = 0;
+    private bool _timerRunning = false;
+    private System.Threading.Timer? _timer;
+
+    protected override void OnInitialized()
+    {
+        _questions = InterviewService.GetAllQuestions()
+            .Where(q => q.QuestionType == QuestionType.Behavioral ||
+                        q.QuestionType == QuestionType.Situational ||
+                        q.QuestionType == QuestionType.Narrative)
+            .ToList();
+        _rubrics = RubricService.GetStarRubric();
+
+        if (!string.IsNullOrEmpty(ResponseId))
+        {
+            var response = InterviewService.GetAllResponses().FirstOrDefault(r => r.Id == ResponseId);
+            if (response != null)
+            {
+                var q = _questions.FirstOrDefault(q => q.Id == response.QuestionId);
+                if (q != null) { LoadQuestion(q, response); return; }
+            }
+        }
+
+        if (!string.IsNullOrEmpty(QuestionId))
+        {
+            var q = _questions.FirstOrDefault(q => q.Id == QuestionId);
+            if (q != null) { LoadQuestion(q); return; }
+        }
+
+        var urgent = InterviewService.GetAllResponses()
+            .Where(r => r.QuestionType == QuestionType.Behavioral ||
+                        r.QuestionType == QuestionType.Situational ||
+                        r.QuestionType == QuestionType.Narrative)
+            .OrderBy(r => r.Deadline ?? DateTime.MaxValue)
+            .ThenBy(r => r.Status)
+            .FirstOrDefault();
+
+        if (urgent != null)
+        {
+            var q = _questions.FirstOrDefault(q => q.Id == urgent.QuestionId);
+            if (q != null) { LoadQuestion(q, urgent); return; }
+        }
+
+        if (_questions.Count > 0) LoadQuestion(_questions[0]);
+    }
+
+    private void LoadQuestion(InterviewQuestion q, InterviewResponse? existing = null)
+    {
+        _currentQuestion = q;
+        _isSTAR = q.QuestionType == QuestionType.Behavioral || q.QuestionType == QuestionType.Situational;
+        _step = 1;
+        _practiceText = "";
+        ResetTimer();
+
+        if (existing is StarResponse star) { _starResponse = star; _freeformResponse = null; }
+        else if (existing is FreeformResponse free) { _freeformResponse = free; _starResponse = null; }
+        else if (_isSTAR)
+        {
+            _starResponse = new StarResponse { QuestionId = q.Id, QuestionType = q.QuestionType };
+            _freeformResponse = null;
+        }
+        else
+        {
+            _freeformResponse = new FreeformResponse { QuestionId = q.Id, QuestionType = q.QuestionType };
+            _starResponse = null;
+        }
+    }
+
+    private void LoadQuestionFromList(InterviewQuestion q)
+    {
+        var existing = InterviewService.GetAllResponses()
+            .FirstOrDefault(r => r.QuestionId == q.Id);
+        LoadQuestion(q, existing);
+    }
+
+    private IEnumerable<IGrouping<string, InterviewQuestion>> GroupedQuestions() =>
+     _questions
+         .OrderBy(q => q.QuestionType switch
+         {
+             QuestionType.Narrative => 0,
+             QuestionType.Behavioral => 1,
+             QuestionType.Situational => 2,
+             _ => 3
+         })
+         .ThenBy(q => q.Competency)
+         .GroupBy(q => q.QuestionType switch
+         {
+             QuestionType.Narrative => "Narrative",
+             QuestionType.Behavioral => "Behavioral",
+             QuestionType.Situational => "Situational",
+             _ => "Other"
+         });
+
+    private string GetFieldValue(string field) => field switch
+    {
+        "Situation" => _starResponse?.Situation ?? "",
+        "Task" => _starResponse?.Task ?? "",
+        "Action" => _starResponse?.Action ?? "",
+        "Result" => _starResponse?.Result ?? "",
+        _ => ""
+    };
+
+    private void SetField(string field, string? value)
+    {
+        if (_starResponse == null) return;
+        value ??= "";
+        switch (field)
+        {
+            case "Situation": _starResponse.Situation = value; break;
+            case "Task": _starResponse.Task = value; break;
+            case "Action": _starResponse.Action = value; break;
+            case "Result": _starResponse.Result = value; break;
+        }
+    }
+
+    private float GetSectionScore(string field) => field switch
+    {
+        "Situation" => _starResponse?.SituationScore ?? 0,
+        "Task" => _starResponse?.TaskScore ?? 0,
+        "Action" => _starResponse?.ActionScore ?? 0,
+        "Result" => _starResponse?.ResultScore ?? 0,
+        _ => 0
+    };
+
+    private void SetSectionScore(string field, string? value)
+    {
+        if (_starResponse == null || !float.TryParse(value, out float score)) return;
+        switch (field)
+        {
+            case "Situation": _starResponse.SituationScore = score; break;
+            case "Task": _starResponse.TaskScore = score; break;
+            case "Action": _starResponse.ActionScore = score; break;
+            case "Result": _starResponse.ResultScore = score; break;
+        }
+    }
+
+    private void SetFreeformText(string? value)
+    {
+        if (_freeformResponse != null) _freeformResponse.Content = value ?? "";
+    }
+
+    private void SetFreeformScore(string? value)
+    {
+        if (_freeformResponse != null && float.TryParse(value, out float score))
+            _freeformResponse.Score = score;
+    }
+
+    private async Task SaveAndFinish()
+    {
+        if (_starResponse != null)
+        {
+            if (string.IsNullOrEmpty(_starResponse.Id)) InterviewService.SaveResponse(_starResponse);
+            else InterviewService.UpdateResponse(_starResponse);
+        }
+        else if (_freeformResponse != null)
+        {
+            if (string.IsNullOrEmpty(_freeformResponse.Id)) InterviewService.SaveResponse(_freeformResponse);
+            else InterviewService.UpdateResponse(_freeformResponse);
+        }
+        _step = 1;
+        _savedConfirmation = true;
+        StateHasChanged();
+        await Task.Delay(3000);
+        _savedConfirmation = false;
+    }
+
+    private async Task SavePracticeAttempt()
+    {
+        StopTimer();
+        var attempt = new PracticeAttempt
+        {
+            Date = DateTime.UtcNow,
+            DurationSeconds = _elapsedSeconds,
+            Notes = _practiceText
+        };
+        if (_starResponse != null)
+        {
+            if (string.IsNullOrEmpty(_starResponse.Id)) InterviewService.SaveResponse(_starResponse);
+            _starResponse.TimeHistory.Add(attempt);
+            InterviewService.UpdateResponse(_starResponse);
+        }
+        _practiceText = "";
+        _elapsedSeconds = 0;
+        _savedConfirmation = true;
+        StateHasChanged(); // gets blazor to rerender so banner shows
+        await Task.Delay(3000); // pause 3 seconds
+        _savedConfirmation = false;
+    }
+
+    private void ToggleMode(ChangeEventArgs e)
+    {
+        _practiceMode = (bool)(e.Value ?? false);
+        _showQuestion = true;
+        ResetTimer();
+    }
+
+    private void StartStopTimer()
+    {
+        if (_timerRunning) StopTimer();
+        else StartTimer();
+    }
+
+    private void StartTimer()
+    {
+        _timerRunning = true;
+        _timer = new System.Threading.Timer(async _ =>
+        {
+            _elapsedSeconds++;
+            if (_timerMode == "countdown" && _elapsedSeconds >= _countdownMinutes * 60)
+            {
+                StopTimer();
+            }
+            await InvokeAsync(StateHasChanged);
+        }, null, 1000, 1000);
+    }
+
+    private void StopTimer()
+    {
+        _timerRunning = false;
+        _timer?.Dispose();
+        _timer = null;
+    }
+
+    private void ResetTimer()
+    {
+        StopTimer();
+        _elapsedSeconds = 0;
+    }
+
+    private string GetTimerColor()
+    {
+        var min = _isSTAR ? 120 : 30;
+        var green = _isSTAR ? 150 : 45;
+        var yellow = _isSTAR ? 180 : 60;
+
+        if (_elapsedSeconds < min) return "#aaa";
+        if (_elapsedSeconds < green) return "#5cb85c";
+        if (_elapsedSeconds < yellow) return "#f0ad4e";
+        return "#d9534f";
+    }
+
+    private string FormatTime(int seconds) =>
+        $"{seconds / 60}:{seconds % 60:D2}";
+
+    public void Dispose() => _timer?.Dispose();
+}

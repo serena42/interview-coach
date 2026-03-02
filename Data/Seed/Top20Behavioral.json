@@ -2,101 +2,183 @@
   {
     "id": "Q001",
     "question": "Tell me about a time you had to influence someone over whom you had no authority.",
-    "competency": "Leadership"
+    "competency": "Leadership",
+    "questionType": "Behavioral",
+    "whyAsked": ""
   },
   {
     "id": "Q002",
     "question": "Describe a situation where you disagreed with a team decision. What did you do?",
-    "competency": "Collaboration"
+    "competency": "Collaboration",
+    "questionType": "Behavioral",
+    "whyAsked": ""
   },
   {
     "id": "Q003",
     "question": "Give an example of a time you failed. What did you learn?",
-    "competency": "Resilience"
+    "competency": "Resilience",
+    "questionType": "Behavioral",
+    "whyAsked": ""
   },
   {
     "id": "Q004",
     "question": "Tell me about a time you had to make a decision with incomplete information.",
-    "competency": "Judgment"
+    "competency": "Judgment",
+    "questionType": "Behavioral",
+    "whyAsked": ""
   },
   {
     "id": "Q005",
     "question": "Describe a time when you had to deliver results under a tight deadline.",
-    "competency": "Execution"
+    "competency": "Execution",
+    "questionType": "Behavioral",
+    "whyAsked": ""
   },
   {
     "id": "Q006",
     "question": "Tell me about a time you took a calculated risk. What was the outcome?",
-    "competency": "Risk-Taking"
+    "competency": "Risk-Taking",
+    "questionType": "Behavioral",
+    "whyAsked": ""
   },
   {
     "id": "Q007",
     "question": "Give an example of a time you improved a process or system.",
-    "competency": "Innovation"
+    "competency": "Innovation",
+    "questionType": "Behavioral",
+    "whyAsked": ""
   },
   {
     "id": "Q008",
     "question": "Describe a time you had to learn something quickly to complete a task.",
-    "competency": "Learning Agility"
+    "competency": "Learning Agility",
+    "questionType": "Behavioral",
+    "whyAsked": ""
   },
   {
     "id": "Q009",
     "question": "Tell me about a time you received critical feedback. How did you respond?",
-    "competency": "Self-Awareness"
+    "competency": "Self-Awareness",
+    "questionType": "Behavioral",
+    "whyAsked": ""
   },
   {
     "id": "Q010",
     "question": "Describe a time when you had to work with someone difficult. How did you handle it?",
-    "competency": "Interpersonal Skills"
+    "competency": "Interpersonal Skills",
+    "questionType": "Behavioral",
+    "whyAsked": ""
   },
   {
     "id": "Q011",
     "question": "Tell me about a time you went above and beyond your job responsibilities.",
-    "competency": "Ownership"
+    "competency": "Ownership",
+    "questionType": "Behavioral",
+    "whyAsked": ""
   },
   {
     "id": "Q012",
     "question": "Give an example of a time you had to prioritize multiple tasks. How did you decide?",
-    "competency": "Time Management"
+    "competency": "Time Management",
+    "questionType": "Behavioral",
+    "whyAsked": ""
   },
   {
     "id": "Q013",
     "question": "Describe a time when you had to make a trade-off between speed and quality.",
-    "competency": "Decision-Making"
+    "competency": "Decision-Making",
+    "questionType": "Behavioral",
+    "whyAsked": ""
   },
   {
     "id": "Q014",
     "question": "Tell me about a time you challenged the status quo.",
-    "competency": "Bias for Action"
+    "competency": "Bias for Action",
+    "questionType": "Behavioral",
+    "whyAsked": ""
   },
   {
     "id": "Q015",
     "question": "Describe a time when you had to explain a complex topic to a non-technical audience.",
-    "competency": "Communication"
+    "competency": "Communication",
+    "questionType": "Behavioral",
+    "whyAsked": ""
   },
   {
     "id": "Q016",
     "question": "Tell me about a time you had to earn trust quickly.",
-    "competency": "Trust & Credibility"
+    "competency": "Trust & Credibility",
+    "questionType": "Behavioral",
+    "whyAsked": ""
   },
   {
     "id": "Q017",
     "question": "Give an example of a time you made a mistake and how you handled it.",
-    "competency": "Accountability"
+    "competency": "Accountability",
+    "questionType": "Behavioral",
+    "whyAsked": ""
   },
   {
     "id": "Q018",
     "question": "Describe a time when you had to adapt to a major change at work.",
-    "competency": "Adaptability"
+    "competency": "Adaptability",
+    "questionType": "Behavioral",
+    "whyAsked": ""
   },
   {
     "id": "Q019",
     "question": "Tell me about a time you mentored or coached someone.",
-    "competency": "People Development"
+    "competency": "People Development",
+    "questionType": "Behavioral",
+    "whyAsked": ""
   },
   {
     "id": "Q020",
     "question": "Give an example of a time you identified a customer need and how you addressed it.",
-    "competency": "Customer Obsession"
+    "competency": "Customer Obsession",
+    "questionType": "Behavioral",
+    "whyAsked": ""
+  },
+  {
+    "id": "N001",
+    "question": "Tell me about yourself.",
+    "competency": "Self-Presentation",
+    "questionType": "Narrative",
+    "whyAsked": "Interviewers use this as a warm-up to understand your background, how you communicate, and whether your story is relevant to the role. They want a concise, confident narrative — not your full resume. Focus on your arc: where you've been, what you've built, and why this role is the logical next step."
+  },
+  {
+    "id": "N002",
+    "question": "Why are you leaving your current position?",
+    "competency": "Self-Awareness",
+    "questionType": "Narrative",
+    "whyAsked": "Interviewers are checking for red flags (bad attitude, conflict, instability) and whether your motivation aligns with what they offer. Keep it forward-looking and positive — talk about what you're moving toward, not away from. Never speak negatively about a former employer."
+  },
+  {
+    "id": "N003",
+    "question": "Why do you want to work here?",
+    "competency": "Motivation & Fit",
+    "questionType": "Narrative",
+    "whyAsked": "This tests whether you've done your research and whether your goals align with the company's mission. Interviewers can tell immediately if you give a generic answer. Show you know something specific about the team, product, or culture and connect it to your own goals."
+  },
+  {
+    "id": "N004",
+    "question": "Where do you see yourself in 5 years?",
+    "competency": "Career Vision",
+    "questionType": "Narrative",
+    "whyAsked": "Interviewers want to know if you have direction, ambition, and whether this role fits your growth plan. They also want to gauge retention risk. Aim for an answer that shows ambition within a realistic trajectory and ties back to the skills you'd develop in this role."
+  },
+  {
+    "id": "N005",
+    "question": "What are your greatest strengths?",
+    "competency": "Self-Awareness",
+    "questionType": "Narrative",
+    "whyAsked": "This is a chance to pitch yourself. Interviewers want to see self-awareness and hear strengths that are relevant to the role. Avoid generic answers like 'hardworking' — pick 1-2 specific strengths and back each one with a brief example or evidence."
+  },
+  {
+    "id": "N006",
+    "question": "What is your greatest weakness?",
+    "competency": "Self-Awareness",
+    "questionType": "Narrative",
+    "whyAsked": "Interviewers are testing honesty and self-awareness, not trying to disqualify you. The trap is either being dishonest ('I work too hard') or revealing something disqualifying. Pick a real but non-critical weakness and show what you're actively doing to improve it."
   }
 ]

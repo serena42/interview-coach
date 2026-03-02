@@ -6,7 +6,8 @@ namespace MiniProject_Take1.Domain.Interview
     {
         public string Id { get; set; }
         public string Question { get; set; }
-        public string Competency { get; set; }
+        public string? Competency { get; set; }
         public QuestionType QuestionType { get; set; }
+        public string? WhyAsked { get; set; }
     }
 }

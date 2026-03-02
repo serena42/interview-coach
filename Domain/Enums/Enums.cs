@@ -51,8 +51,8 @@
 
     public enum ItemStatus
     {
-        TODO,
-        WIP,
+        Todo,
+        Wip,
         Solid,
         Mastered
     }

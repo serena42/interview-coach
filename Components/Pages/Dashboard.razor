@@ -149,7 +149,7 @@
         var answeredIds = responses.Select(r => r.QuestionId).ToHashSet();
 
         _todo = _questions.Where(q => !answeredIds.Contains(q.Id)).ToList();
-        _wip = responses.Where(r => r.Status == ItemStatus.WIP)
+        _wip = responses.Where(r => r.Status == ItemStatus.Wip)
                         .OrderBy(r => r.Deadline ?? DateTime.MaxValue)
                         .ThenBy(r => GetScore(r)).ToList();
         _solid = responses.Where(r => r.Status == ItemStatus.Solid)
@@ -164,8 +164,8 @@
     {
         var prefix = q.QuestionType switch
         {
-            QuestionType.Behavioral => "STAR",
-            QuestionType.Situational => "STAR",
+            QuestionType.Behavioral => "Behavioral",
+            QuestionType.Situational => "Situational",
             QuestionType.Narrative => "Narrative",
             QuestionType.Technical => "Technical",
             _ => "Other"
@@ -184,6 +184,7 @@
     private float GetScore(InterviewResponse r)
     {
         if (r is StarResponse star) return star.OverallScore;
+        if (r is FreeformResponse free) return free.Score;
         return 0;
     }
 
@@ -195,7 +196,7 @@
             .FirstOrDefault();
 
         _needsWork = responses
-            .Where(r => r.Status == ItemStatus.WIP)
+            .Where(r => r.Status == ItemStatus.Wip)
             .OrderBy(r => GetScore(r))
             .FirstOrDefault();
 
@@ -206,14 +207,14 @@
     }
 
     private void StartQuestion(InterviewQuestion q) =>
-        Navigation.NavigateTo($"/star?questionId={q.Id}");
+        Navigation.NavigateTo($"/behavioral?questionId={q.Id}");
 
-    private void OpenWip() => Navigation.NavigateTo($"/star/{_wip[_wipIndex].Id}");
-    private void OpenSolid() => Navigation.NavigateTo($"/star/{_solid[_solidIndex].Id}");
-    private void OpenMastered(InterviewResponse r) => Navigation.NavigateTo($"/star/{r.Id}");
-    private void OpenUrgent() => Navigation.NavigateTo($"/star/{_mostUrgent!.Id}");
-    private void OpenNeedsWork() => Navigation.NavigateTo($"/star/{_needsWork!.Id}");
-    private void OpenReadyToPractice() => Navigation.NavigateTo($"/star/{_readyToPractice!.Id}");
+    private void OpenWip() => Navigation.NavigateTo($"/behavioral/{_wip[_wipIndex].Id}");
+    private void OpenSolid() => Navigation.NavigateTo($"/behavioral/{_solid[_solidIndex].Id}");
+    private void OpenMastered(InterviewResponse r) => Navigation.NavigateTo($"/behavioral/{r.Id}");
+    private void OpenUrgent() => Navigation.NavigateTo($"/behavioral/{_mostUrgent!.Id}");
+    private void OpenNeedsWork() => Navigation.NavigateTo($"/behavioral/{_needsWork!.Id}");
+    private void OpenReadyToPractice() => Navigation.NavigateTo($"/behavioral/{_readyToPractice!.Id}");
 
     private void PrevWip() => _wipIndex = (_wipIndex - 1 + _wip.Count) % _wip.Count;
     private void NextWip() => _wipIndex = (_wipIndex + 1) % _wip.Count;

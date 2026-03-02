@@ -3,8 +3,9 @@ namespace MiniProject_Take1.Domain.Interview
 {
     public class FreeformResponse : InterviewResponse
     {
-        // Narrative + Technical
+        // Narrative 
                 public string Content { get; set; }
+                public float Score { get; set; }
 
     }
 }

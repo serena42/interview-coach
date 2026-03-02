@@ -131,7 +131,6 @@ else
     {
         _selectedRating = rating;
 
-        // Save immediately so progress isn't lost on bail out
         var card = _currentCard;
         InterviewResponse response;
 
@@ -141,13 +140,16 @@ else
         }
         else
         {
-            // First time seeing this card — create a response
             response = new FreeformResponse
             {
                 QuestionId = card.Question.Id,
                 QuestionType = card.Question.QuestionType
             };
             InterviewService.SaveResponse(response);
+
+            // Update the card in the queue so re-rating uses the saved response
+            _currentCard = (card.Question, response);
+            _queue[_currentIndex] = _currentCard;
         }
 
         InterviewService.UpdateReviewSchedule(response, rating);

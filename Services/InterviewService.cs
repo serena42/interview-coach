@@ -104,6 +104,13 @@ namespace MiniProject_Take1.Services
                 _ => 1
             };
             response.NextReviewDate = DateTime.UtcNow.AddDays(response.ReviewInterval);
+
+            if (response is FreeformResponse free)
+            {
+                // Map 1-5 rating to 1-10 score so status promotion logic works
+                free.Score = rating * 2;
+            }
+
             UpdateResponse(response);
         }
         public void SaveResponse(InterviewResponse response)
@@ -115,8 +122,11 @@ namespace MiniProject_Take1.Services
         }
 
         public List<InterviewResponse> GetAllResponses() => _responses;
-        public List<(InterviewQuestion Question, InterviewResponse? Response)> BuildReviewSession(int newCardCount)
+        public List<(InterviewQuestion Question, InterviewResponse? Response)> 
+            
+        BuildReviewSession(int newCardCount)
         {
+            var questionsById = _questions.ToDictionary(q => q.Id);
             var answeredIds = _responses
                 .Select(r => r.QuestionId)
                 .ToHashSet();
@@ -124,10 +134,11 @@ namespace MiniProject_Take1.Services
             // Due cards — already have a response, past due date
             var dueResponses = GetDueForReview();
             var dueCards = dueResponses
-                .Select(r => (
-                    Question: _questions.FirstOrDefault(q => q.Id == r.QuestionId),
-                    Response: (InterviewResponse?)r
-                ))
+                .Select(r =>
+                {
+                    questionsById.TryGetValue(r.QuestionId, out var question);
+                    return (Question: question, Response: (InterviewResponse?)r);
+                })
                 .Where(x => x.Question != null)
                 .ToList();
 
@@ -180,7 +191,7 @@ namespace MiniProject_Take1.Services
                     DifficultyLevel.Advanced => 2,
                     _ => 3
                 })
-                .SelectMany(g => g.OrderBy(_ => rng.Next()))
+                .SelectMany(g => g.OrderBy(_ => Random.Shared.Next()))
                 .ToList();
 
             return shuffledDue.Concat(newCards).ToList();

@@ -25,12 +25,6 @@
         Other
     }
 
-    public enum ConfidenceLevel
-    {
-        High,
-        Medium,
-        Low
-    }
 
     public enum QuestionType
     {

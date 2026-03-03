@@ -15,18 +15,14 @@
     <nav class="nav flex-column">
         <div class="nav-item px-3">
             <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
-                <span class="bi bi-box-arrow-in-right-nav-menu" aria-hidden="true"></span> Login
+                <span class="bi bi-house-door-fill-nav-menu" aria-hidden="true"></span> LOGIN
             </NavLink>
         </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="dashboard">
-                <span class="bi bi-speedometer2-nav-menu" aria-hidden="true"></span> Dashboard
-            </NavLink>
-        </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="behavioral">
-                <span class="bi bi-chat-square-text-nav-menu" aria-hidden="true"></span> Behavioral
-            </NavLink>
+            <div class="nav-item px-3">
+                <NavLink class="nav-link" href="dashboard">
+                    <span class="bi bi-speedometer2-nav-menu" aria-hidden="true"></span> Dashboard
+                </NavLink>
+            
         </div>
         <div class="nav-item px-3">
             <NavLink class="nav-link" href="technical">
@@ -38,25 +34,11 @@
                 <span class="bi bi-code-slash-nav-menu" aria-hidden="true"></span> Coding
             </NavLink>
         </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="interview">
-                <span class="bi bi-person-badge-nav-menu" aria-hidden="true"></span> Interview
-            </NavLink>
-        </div>
+
         <div class="nav-item px-3">
             <button class="nav-link btn btn-link" @onclick="ExportSession">
                 <span class="bi bi-download-nav-menu" aria-hidden="true"></span> Export Session
             </button>
-            @if (SessionService.LastExported.HasValue)
-            {
-                <small style="font-size:0.7em; color:#aaa; padding-left:12px;">
-                    Last: @SessionService.LastExported.Value.ToLocalTime().ToString("h:mm tt")
-                </small>
-            }
-            else
-            {
-                <small style="font-size:0.7em; color:#f0ad4e; padding-left:12px;">Not yet exported</small>
-            }
         </div>
     </nav>
 </div>

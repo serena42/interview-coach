@@ -1,4 +1,4 @@
-﻿namespace MiniProject_Take1.Domain.Enums
+namespace MiniProject_Take1.Domain.Enums
 {
 
     public enum RoleType
@@ -53,9 +53,8 @@
     {
         Todo,
         Wip,
-        Solid,
+        Solid, 
         Mastered
     }
 
-    public enum DifficultyLevel { Basic, Intermediate, Advanced }
 }

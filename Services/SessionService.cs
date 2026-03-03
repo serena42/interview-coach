@@ -30,15 +30,27 @@ namespace MiniProject_Take1.Services
         {
             CurrentSession.ExportDate = DateTime.UtcNow;
             CurrentSession.Responses = _interviewService.GetAllResponses();
-            LastExported = DateTime.UtcNow;
-            var json = JsonSerializer.Serialize(CurrentSession, GetOptions());
-            ClearAutoSave();
-            return json;
+
+            var options = new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true,
+                WriteIndented = true,
+                Converters = { new JsonStringEnumConverter() }
+            };
+
+            return JsonSerializer.Serialize(CurrentSession, options);
         }
 
         public void ImportSession(string json)
         {
-            var session = JsonSerializer.Deserialize<SessionData>(json, GetOptions());
+            var options = new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true,
+                WriteIndented = true,
+                Converters = { new JsonStringEnumConverter() }
+            };
+
+            var session = JsonSerializer.Deserialize<SessionData>(json, options);
             if (session == null) return;
             CurrentSession = session;
             foreach (var response in session.Responses)

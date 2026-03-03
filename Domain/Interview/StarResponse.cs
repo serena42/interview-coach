@@ -13,6 +13,5 @@ namespace MiniProject_Take1.Domain.Interview
         public float ActionScore { get; set; }
         public float ResultScore { get; set; }
         public float OverallScore => (SituationScore + TaskScore + ActionScore + ResultScore) / 4;
-        public List<PracticeAttempt> TimeHistory { get; set; } = new();
     }
 }

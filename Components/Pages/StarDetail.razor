@@ -34,12 +34,13 @@ else
                    style="width:100%;" />
         </div>
     }
-
     <button @onclick="Save">Save Changes</button>
+    <button @onclick="Demote" style="margin-left:10px; color:red;">Demote</button>
     <button @onclick="GoBack" style="margin-left:10px;">Back</button>
 }
 
 @code {
+
     [Parameter] public string Id { get; set; }
 
     private StarResponse? _response;
@@ -110,6 +111,15 @@ else
     {
         if (_response != null)
             _response.LastEdited = DateTime.UtcNow;
+        Navigation.NavigateTo("/statements");
+    }
+    private void Demote()
+    {
+        if (_response == null) return;
+        if (_response.Status == ItemStatus.Mastered) _response.Status = ItemStatus.Solid;
+        else if (_response.Status == ItemStatus.Solid) _response.Status = ItemStatus.Wip;
+        else if (_response.Status == ItemStatus.Wip) _response.Status = ItemStatus.Todo;
+        InterviewService.UpdateResponse(_response);
         Navigation.NavigateTo("/statements");
     }
 

@@ -108,10 +108,16 @@ namespace MiniProject_Take1.Services
         }
         public void SaveResponse(InterviewResponse response)
         {
-            response.Id = Guid.NewGuid().ToString();
+            if (string.IsNullOrEmpty(response.Id))
+                response.Id = Guid.NewGuid().ToString();
             response.LastEdited = DateTime.UtcNow;
             UpdateStatus(response);
             _responses.Add(response);
+        }
+        public void UpdateResponse(InterviewResponse response)
+        {
+            response.LastEdited = DateTime.UtcNow;
+            UpdateStatus(response);
         }
 
         public void UpdateResponse(InterviewResponse response)
@@ -121,79 +127,18 @@ namespace MiniProject_Take1.Services
         }
 
         public List<InterviewResponse> GetAllResponses() => _responses;
-        public List<(InterviewQuestion Question, InterviewResponse? Response)> 
-            
-        BuildReviewSession(int newCardCount)
+
+        public void UpdateStatus(InterviewResponse response)
         {
-            var questionsById = _questions.ToDictionary(q => q.Id);
-            var answeredIds = _responses
-                .Select(r => r.QuestionId)
-                .ToHashSet();
-
-            // Due cards — already have a response, past due date
-            var dueResponses = GetDueForReview();
-            var dueCards = dueResponses
-                .Select(r =>
-                {
-                    questionsById.TryGetValue(r.QuestionId, out var question);
-                    return (Question: question, Response: (InterviewResponse?)r);
-                })
-                .Where(x => x.Question != null)
-                .ToList();
-
-            // Determine which difficulty is currently unlocked for new cards
-            var basicDone = !_questions
-                .Any(q => (q.QuestionType == QuestionType.Technical || q.QuestionType == QuestionType.Coding)
-                       && q.Difficulty == DifficultyLevel.Basic
-                       && !answeredIds.Contains(q.Id));
-
-            var intermediateDone = !_questions
-                .Any(q => (q.QuestionType == QuestionType.Technical || q.QuestionType == QuestionType.Coding)
-                       && q.Difficulty == DifficultyLevel.Intermediate
-                       && !answeredIds.Contains(q.Id));
-
-            var unlockedDifficulty = basicDone
-                ? (intermediateDone ? DifficultyLevel.Advanced : DifficultyLevel.Intermediate)
-                : DifficultyLevel.Basic;
-
-            // Cap new cards so total doesn't exceed 20, unless reviews alone exceed 20
-            var maxNew = Math.Max(0, 20 - dueCards.Count);
-            var actualNewCount = dueCards.Count >= 20
-                ? 0
-                : Math.Min(newCardCount, maxNew);
-
-            // Minimum 5 total
-            if (dueCards.Count + actualNewCount < 5)
-                actualNewCount = Math.Min(5 - dueCards.Count,
-                    _questions.Count(q =>
-                        (q.QuestionType == QuestionType.Technical || q.QuestionType == QuestionType.Coding)
-                        && q.Difficulty == unlockedDifficulty
-                        && !answeredIds.Contains(q.Id)));
-
-            // Get new cards at unlocked difficulty
-            var newCards = _questions
-                .Where(q => (q.QuestionType == QuestionType.Technical || q.QuestionType == QuestionType.Coding)
-                         && q.Difficulty == unlockedDifficulty
-                         && !answeredIds.Contains(q.Id))
-                .Take(actualNewCount)
-                .Select(q => (Question: q, Response: (InterviewResponse?)null))
-                .ToList();
-
-            // Shuffle due cards within difficulty groups, then append new cards
-            var rng = new Random();
-            var shuffledDue = dueCards
-                .GroupBy(x => x.Question!.Difficulty)
-                .OrderBy(g => g.Key switch
-                {
-                    DifficultyLevel.Basic => 0,
-                    DifficultyLevel.Intermediate => 1,
-                    DifficultyLevel.Advanced => 2,
-                    _ => 3
-                })
-                .SelectMany(g => g.OrderBy(_ => Random.Shared.Next()))
-                .ToList();
-
-            return shuffledDue.Concat(newCards).ToList();
+            if (response is StarResponse star)
+            {
+                if (response.Status == ItemStatus.Todo)
+                    response.Status = ItemStatus.Wip;
+                else if (response.Status == ItemStatus.Wip && star.OverallScore >= 7)
+                    response.Status = ItemStatus.Solid;
+                else if (response.Status == ItemStatus.Solid && star.OverallScore >= 9)
+                    response.Status = ItemStatus.Mastered;
+            }
         }
     }
 }

@@ -6,8 +6,7 @@
 @using MiniProject_Take1.Domain.Interview
 @using MiniProject_Take1.Domain.Enums
 
-<h3>Technical & Coding Review</h3>
-
+<h3>@(Mode?.ToLower() == "coding" ? "Coding Review" : "Technical Review")</h3>
 @if (_sessionDone)
 {
     <!-- Summary screen -->
@@ -97,6 +96,7 @@ else
 
 @code {
     [SupplyParameterFromQuery] public int NewCards { get; set; } = 5;
+    [SupplyParameterFromQuery] public string Mode { get; set; } = "technical";
 
     private List<(InterviewQuestion Question, InterviewResponse? Response)> _queue = new();
     private (InterviewQuestion Question, InterviewResponse? Response) _currentCard;
@@ -113,7 +113,16 @@ else
 
     protected override void OnInitialized()
     {
-        _queue = InterviewService.BuildReviewSession(NewCards);
+        // intentionally empty
+    }
+
+    protected override void OnParametersSet()
+    {
+        if (_sessionStarted || _sessionDone) return; // don't reset on re-renders
+
+        var questionType = Mode?.ToLower() == "coding" ? QuestionType.Coding : QuestionType.Technical;
+        System.Diagnostics.Debug.WriteLine($"Mode: {Mode}, QuestionType: {questionType}");
+        _queue = InterviewService.BuildReviewSession(NewCards, questionType);
         if (_queue.Count > 0)
         {
             _currentCard = _queue[0];

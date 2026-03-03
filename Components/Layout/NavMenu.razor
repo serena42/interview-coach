@@ -47,6 +47,16 @@
             <button class="nav-link btn btn-link" @onclick="ExportSession">
                 <span class="bi bi-download-nav-menu" aria-hidden="true"></span> Export Session
             </button>
+            @if (SessionService.LastExported.HasValue)
+            {
+                <small style="font-size:0.7em; color:#aaa; padding-left:12px;">
+                    Last: @SessionService.LastExported.Value.ToLocalTime().ToString("h:mm tt")
+                </small>
+            }
+            else
+            {
+                <small style="font-size:0.7em; color:#f0ad4e; padding-left:12px;">Not yet exported</small>
+            }
         </div>
     </nav>
 </div>

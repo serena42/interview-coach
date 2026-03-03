@@ -12,7 +12,6 @@ namespace MiniProject_Take1.Domain.Interview
         public string QuestionId { get; set; }
         public QuestionType QuestionType { get; set; }
         public DateTime LastEdited { get; set; }
-        public ConfidenceLevel Confidence { get; set; }
         public string Company { get; set; }
         public string Role { get; set; }
         public ItemStatus Status { get; set; }

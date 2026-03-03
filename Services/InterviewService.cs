@@ -48,15 +48,11 @@ namespace MiniProject_Take1.Services
             _questions.Where(q => q.QuestionType == type).ToList();
 
 
-        public List<InterviewQuestion> GetNewForReview()
+        public List<InterviewQuestion> GetNewForReview(QuestionType questionType)
         {
-            var answeredIds = _responses
-                .Select(r => r.QuestionId)
-                .ToHashSet();
-
+            var answeredIds = _responses.Select(r => r.QuestionId).ToHashSet();
             return _questions
-                .Where(q => q.QuestionType == QuestionType.Technical || q.QuestionType == QuestionType.Coding)
-                .Where(q => !answeredIds.Contains(q.Id))
+                .Where(q => q.QuestionType == questionType && !answeredIds.Contains(q.Id))
                 .ToList();
         }
         public void UpdateStatus(InterviewResponse response)
@@ -86,10 +82,10 @@ namespace MiniProject_Take1.Services
                     response.Status = ItemStatus.Wip;
             }
         }
-        public List<InterviewResponse> GetDueForReview()
+        public List<InterviewResponse> GetDueForReview(QuestionType questionType)
         {
             return _responses
-                .Where(r => r.QuestionType == QuestionType.Technical || r.QuestionType == QuestionType.Coding)
+                .Where(r => r.QuestionType == questionType)
                 .Where(r => r.NextReviewDate == null || r.NextReviewDate <= DateTime.UtcNow)
                 .OrderBy(r => r.NextReviewDate ?? DateTime.MinValue)
                 .ToList();
@@ -129,17 +125,12 @@ namespace MiniProject_Take1.Services
         }
 
         public List<InterviewResponse> GetAllResponses() => _responses;
-        public List<(InterviewQuestion Question, InterviewResponse? Response)> 
-            
-        BuildReviewSession(int newCardCount)
+        public List<(InterviewQuestion Question, InterviewResponse? Response)> BuildReviewSession(int newCardCount, QuestionType questionType)
         {
             var questionsById = _questions.ToDictionary(q => q.Id);
-            var answeredIds = _responses
-                .Select(r => r.QuestionId)
-                .ToHashSet();
+            var answeredIds = _responses.Select(r => r.QuestionId).ToHashSet();
 
-            // Due cards — already have a response, past due date
-            var dueResponses = GetDueForReview();
+            var dueResponses = GetDueForReview(questionType);
             var dueCards = dueResponses
                 .Select(r =>
                 {
@@ -149,14 +140,13 @@ namespace MiniProject_Take1.Services
                 .Where(x => x.Question != null)
                 .ToList();
 
-            // Determine which difficulty is currently unlocked for new cards
             var basicDone = !_questions
-                .Any(q => (q.QuestionType == QuestionType.Technical || q.QuestionType == QuestionType.Coding)
+                .Any(q => q.QuestionType == questionType
                        && q.Difficulty == DifficultyLevel.Basic
                        && !answeredIds.Contains(q.Id));
 
             var intermediateDone = !_questions
-                .Any(q => (q.QuestionType == QuestionType.Technical || q.QuestionType == QuestionType.Coding)
+                .Any(q => q.QuestionType == questionType
                        && q.Difficulty == DifficultyLevel.Intermediate
                        && !answeredIds.Contains(q.Id));
 
@@ -164,31 +154,24 @@ namespace MiniProject_Take1.Services
                 ? (intermediateDone ? DifficultyLevel.Advanced : DifficultyLevel.Intermediate)
                 : DifficultyLevel.Basic;
 
-            // Cap new cards so total doesn't exceed 20, unless reviews alone exceed 20
             var maxNew = Math.Max(0, 20 - dueCards.Count);
-            var actualNewCount = dueCards.Count >= 20
-                ? 0
-                : Math.Min(newCardCount, maxNew);
+            var actualNewCount = dueCards.Count >= 20 ? 0 : Math.Min(newCardCount, maxNew);
 
-            // Minimum 5 total
             if (dueCards.Count + actualNewCount < 5)
                 actualNewCount = Math.Min(5 - dueCards.Count,
                     _questions.Count(q =>
-                        (q.QuestionType == QuestionType.Technical || q.QuestionType == QuestionType.Coding)
+                        q.QuestionType == questionType
                         && q.Difficulty == unlockedDifficulty
                         && !answeredIds.Contains(q.Id)));
 
-            // Get new cards at unlocked difficulty
             var newCards = _questions
-                .Where(q => (q.QuestionType == QuestionType.Technical || q.QuestionType == QuestionType.Coding)
+                .Where(q => q.QuestionType == questionType
                          && q.Difficulty == unlockedDifficulty
                          && !answeredIds.Contains(q.Id))
                 .Take(actualNewCount)
                 .Select(q => (Question: q, Response: (InterviewResponse?)null))
                 .ToList();
 
-            // Shuffle due cards within difficulty groups, then append new cards
-            var rng = new Random();
             var shuffledDue = dueCards
                 .GroupBy(x => x.Question!.Difficulty)
                 .OrderBy(g => g.Key switch

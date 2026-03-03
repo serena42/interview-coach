@@ -89,15 +89,16 @@
 
 </div>
 <div style="border:1px solid #337ab7; padding:10px; margin-bottom:20px; display:flex; align-items:center; gap:20px;">
-    <div>
+    <div style="flex:1;">
         <strong>Technical &amp; Coding Review</strong>
-        <p style="font-size:0.85em; margin:4px 0;">@_dueForReview cards due for review · @_newForReview new cards available</p>
+        <p style="font-size:0.85em; margin:4px 0;">Technical: @_dueForReview due · @_newForReview new &nbsp;|&nbsp; Coding: @_dueCodingForReview due · @_newCodingForReview new</p>
     </div>
     <div style="display:flex; align-items:center; gap:8px;">
         <label style="font-size:0.85em;">New cards:</label>
         <input type="number" min="0" max="20" @bind="_newCardCount" style="width:50px;" />
     </div>
-    <button @onclick='() => Navigation.NavigateTo($"/technical?newCards={_newCardCount}")'>Start Session</button>
+    <button @onclick='() => Navigation.NavigateTo($"/technical?newCards={_newCardCount}")'>Technical</button>
+    <button @onclick='() => Navigation.NavigateTo($"/coding?newCards={_newCardCount}")'>Coding</button>
 </div>
 
 <hr />
@@ -150,6 +151,8 @@
     private int _dueForReview = 0;
     private int _newForReview = 0;
     private int _newCardCount = 5;
+    private int _dueCodingForReview = 0;
+    private int _newCodingForReview = 0;
 
     private InterviewResponse? _mostUrgent;
     private InterviewResponse? _needsWork;
@@ -180,8 +183,10 @@
                           .OrderBy(r => r.LastEdited).ToList();
         _mastered = responses.Where(r => r.Status == ItemStatus.Mastered)
                              .OrderByDescending(r => r.LastEdited).ToList();
-        _dueForReview = InterviewService.GetDueForReview().Count;
-        _newForReview = InterviewService.GetNewForReview().Count;
+        _dueForReview = InterviewService.GetDueForReview(QuestionType.Technical).Count;
+        _newForReview = InterviewService.GetNewForReview(QuestionType.Technical).Count;
+        _dueCodingForReview = InterviewService.GetDueForReview(QuestionType.Coding).Count;
+        _newCodingForReview = InterviewService.GetNewForReview(QuestionType.Coding).Count;
 
         ComputeRecommendations(responses);
     }

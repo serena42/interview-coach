@@ -306,8 +306,6 @@
 
     private bool _showQuestion = true;
     private string _practiceText = "";
-    private string _timerMode = "freerun";
-    private int _countdownMinutes = 3;
     private int _elapsedSeconds = 0;
     private bool _timerRunning = false;
     private System.Threading.Timer? _timer;
@@ -510,10 +508,6 @@
         _timer = new System.Threading.Timer(async _ =>
         {
             _elapsedSeconds++;
-            if (_timerMode == "countdown" && _elapsedSeconds >= _countdownMinutes * 60)
-            {
-                StopTimer();
-            }
             await InvokeAsync(StateHasChanged);
         }, null, 1000, 1000);
     }

@@ -85,4 +85,3 @@ Actively in development as part of MSSA-CAD cohort Week 8/17 mini-project.
 - `Coding.razor` — syntax and implementation practice page
 - `Interview.razor` — full mock interview simulator
 - Challenge mode — timed mixed practice sessions
-- Retire legacy pages (StarPractice, StarDetail, MyStatements)

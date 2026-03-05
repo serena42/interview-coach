@@ -5,7 +5,7 @@
 
 ## What It Does
 
-Interview prep is easy to misjudge — you "feel" ready until you freeze or ramble in the moment. This app gives structure, repetition, and visibility into your actual progress across behavioral, narrative, and technical question types.
+Interview prep is easy to misjudge — you think you're ready until you freeze or ramble in the moment. This app gives structure, repetition, and visibility into your actual progress across behavioral, narrative, and technical question types.
 
 ---
 
@@ -17,12 +17,10 @@ Interview prep is easy to misjudge — you "feel" ready until you freeze or ramb
 - Narrative questions use a single freeform response with a score slider
 - Practice mode includes a **Toastmasters-style timer** with color-coded zones (grey / green / yellow / red) based on target time ranges per question type
 - Save practice attempts with duration and notes
-
+  
 ### 📊 Kanban Dashboard
 - Responses move through **Todo → Wip → Solid → Mastered** automatically based on score thresholds
 - Wip → Solid at score ≥ 7, Solid → Mastered at score ≥ 9
-- Manual demotion available
-- Smart recommendation panel surfaces: most urgent (by deadline), needs most work (lowest score), and ready to practice (highest scoring Wip)
 
 ### 🔁 Spaced Repetition — Technical & Coding Review
 - Simplified spaced repetition algorithm inspired by SM-2
@@ -59,14 +57,6 @@ Interview prep is easy to misjudge — you "feel" ready until you freeze or ramb
 - **`SessionService`** handles import/export and auto-save. Depends on `InterviewService` via constructor injection; avoids circular dependency by calling `AutoSave()` directly from pages rather than through a callback.
 - **`BuildReviewSession()`** builds the spaced repetition queue — due cards shuffled within difficulty groups, new cards appended at the unlocked difficulty tier.
 - Blazor's `System.Threading.Timer` is used for the practice timer. `InvokeAsync(StateHasChanged)` marshals UI updates back to the render thread safely.
-
----
-
-## Why No Database
-
-- User-owned data — everything stays local as a JSON file
-- Zero accounts, zero cloud storage, zero vendor dependency
-- Simple to reason about and demo; import/export makes sessions fully portable
 
 ---
 

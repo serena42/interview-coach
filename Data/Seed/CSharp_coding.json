@@ -7,9 +7,10 @@
     "difficulty": "Basic",
     "whyAsked": null,
     "answerPoints": [
-      "Syntax: type variableName = value;",
-      "Example: int age = 25;",
-      "Example: string name = \"Alice\";",
+      "code: type variableName = value;",
+      "code: int age = 25;",
+      "code: string name = \\",
+      "Alice\\\\\";\"",
       "Using var: var count = 10; — compiler infers int",
       "Variables must be initialized before use"
     ]

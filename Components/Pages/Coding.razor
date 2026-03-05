@@ -1,4 +1,196 @@
 ﻿@page "/coding"
 @rendermode InteractiveServer
-<h3>Coding</h3>
-<p>LeetCode practice and whiteboarding coming soon.</p>
+@inject InterviewService InterviewService
+@inject NavigationManager Navigation
+@inject SessionService SessionService
+@using MiniProject_Take1.Services
+@using MiniProject_Take1.Domain.Interview
+@using MiniProject_Take1.Domain.Enums
+
+<h3>Coding Review</h3>
+
+@if (_sessionDone)
+{
+    <!-- Summary screen -->
+    <div style="max-width:500px; margin:40px auto; text-align:center;">
+        <h4>Session Complete!</h4>
+        <p>Cards reviewed: <strong>@_reviewed</strong></p>
+        <p>Average rating: <strong>@(_reviewed > 0 ? (_totalRating / (float)_reviewed).ToString("0.0") : "—")/5</strong></p>
+        <button @onclick='() => Navigation.NavigateTo("/dashboard")' style="margin-top:16px;">Back to Dashboard</button>
+    </div>
+}
+else if (!_sessionStarted)
+{
+    <p>Loading session...</p>
+}
+else
+{
+    <div style="max-width:700px;">
+        <!-- Progress -->
+        <p style="font-size:0.8em; color:#888;">Card @(_currentIndex + 1) of @_queue.Count · @_currentCard.Question.Difficulty · @_currentCard.Question.QuestionType</p>
+
+        <!-- Question -->
+        <div style="background:#f9f9f9; border-left:3px solid #337ab7; padding:12px; margin-bottom:16px;">
+            <h5 style="margin:0;">@_currentCard.Question.Question</h5>
+        </div>
+
+        @if (!_revealed)
+        {
+            <!-- Answer input -->
+            <label style="font-size:0.85em; color:#555;">Your answer:</label>
+            <textarea value="@_userAnswer"
+                      @onchange="e => _userAnswer = e.Value?.ToString() ?? string.Empty"
+                      rows="6" style="width:100%; margin-top:4px;"></textarea>
+            <button @onclick="Reveal" style="margin-top:10px;">Reveal Answer</button>
+        }
+        else
+        {
+            <!-- Side by side answers -->
+            <div style="display:flex; gap:16px; margin-bottom:16px;">
+                <div style="flex:1; border:1px solid #ddd; padding:10px; background:#fff;">
+                    <strong style="font-size:0.8em; color:#888;">YOUR ANSWER</strong>
+                    <p style="font-size:0.9em; white-space:pre-wrap; margin-top:8px;">@(string.IsNullOrWhiteSpace(_userAnswer) ? "(no answer entered)" : _userAnswer)</p>
+                </div>
+                <div style="flex:1; border:1px solid #5cb85c; padding:10px; background:#f0fff0;">
+                    <strong style="font-size:0.8em; color:#888;">CORRECT ANSWER</strong>
+                    <ul style="margin-top:8px; padding-left:16px;">
+                        @foreach (var point in _currentCard.Question.AnswerPoints)
+                        {
+                            @if (point.StartsWith("code:"))
+                            {
+                                <li style="list-style:none; margin-bottom:4px;">
+                                    <pre style="background:#1e1e1e; color:#d4d4d4; padding:8px; border-radius:4px; font-size:0.8em; overflow-x:auto; margin:0;">@point.Substring(5).Trim()</pre>
+                                </li>
+                            }
+                            else
+                            {
+                                <li style="font-size:0.9em; margin-bottom:4px;">@point</li>
+                            }
+                        }
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Star rating -->
+            <div style="margin-bottom:16px;">
+                <p style="font-size:0.85em; color:#555; margin-bottom:8px;">How well did you know this?</p>
+                <div style="display:flex; gap:8px;">
+                    @for (int i = 1; i <= 5; i++)
+                    {
+                        var rating = i;
+                        var label = rating switch
+                        {
+                            1 => "Blank",
+                            2 => "Wrong",
+                            3 => "Partial",
+                            4 => "Good",
+                            5 => "Perfect",
+                            _ => ""
+                        };
+                        <button @onclick="() => Rate(rating)"
+                                style="padding:8px 14px; background:@(_selectedRating == rating ? RatingColor(rating) : "#eee"); color:@(_selectedRating == rating ? "white" : "#333"); border:1px solid #ccc; border-radius:4px; cursor:pointer;">
+                            @rating ★ @label
+                        </button>
+                    }
+                </div>
+            </div>
+
+            @if (_selectedRating > 0)
+            {
+                <button @onclick="NextCard" style="padding:8px 20px;">
+                    @(_currentIndex < _queue.Count - 1 ? "Next Card" : "Finish Session")
+                </button>
+            }
+        }
+    </div>
+}
+
+@code {
+    private List<(InterviewQuestion Question, InterviewResponse? Response)> _queue = new();
+    private (InterviewQuestion Question, InterviewResponse? Response) _currentCard;
+    [SupplyParameterFromQuery] public int NewCards { get; set; } = 5;
+    private bool _sessionStarted = false;
+    private int _currentIndex = 0;
+
+    private string _userAnswer = string.Empty;
+    private bool _revealed = false;
+    private int _selectedRating = 0;
+
+    private bool _sessionDone = false;
+    private int _reviewed = 0;
+    private int _totalRating = 0;
+
+
+    protected override void OnInitialized()
+    {
+        _queue = InterviewService.BuildReviewSession(NewCards);
+        if (_queue.Count > 0)
+        {
+            _currentCard = _queue[0];
+            _sessionStarted = true;
+        }
+        else
+        {
+            _sessionDone = true;
+        }
+    }
+
+    private void Reveal() => _revealed = true;
+
+    private void Rate(int rating)
+    {
+        _selectedRating = rating;
+
+        var card = _currentCard;
+        InterviewResponse response;
+
+        if (card.Response != null)
+        {
+            response = card.Response;
+        }
+        else
+        {
+            response = new FreeformResponse
+            {
+                QuestionId = card.Question.Id,
+                QuestionType = card.Question.QuestionType
+            };
+            InterviewService.SaveResponse(response);
+
+            // Update the card in the queue so re-rating uses the saved response
+            _currentCard = (card.Question, response);
+            _queue[_currentIndex] = _currentCard;
+        }
+
+        InterviewService.UpdateReviewSchedule(response, rating);
+        SessionService.AutoSave();
+    }
+
+    private void NextCard()
+    {
+        _reviewed++;
+        _totalRating += _selectedRating;
+
+        _currentIndex++;
+        if (_currentIndex >= _queue.Count)
+        {
+            _sessionDone = true;
+            return;
+        }
+
+        _currentCard = _queue[_currentIndex];
+        _userAnswer = string.Empty;
+        _revealed = false;
+        _selectedRating = 0;
+    }
+
+    private string RatingColor(int rating) => rating switch
+    {
+        1 => "#d9534f",
+        2 => "#f0ad4e",
+        3 => "#5bc0de",
+        4 => "#5cb85c",
+        5 => "#337ab7",
+        _ => "#eee"
+    };
+}

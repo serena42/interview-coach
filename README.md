@@ -32,9 +32,9 @@ Interview prep is easy to misjudge — you "feel" ready until you freeze or ramb
 - Progress saved on every rating — bail out mid-session without losing work
 
 ### 💾 Session Export / Import
-- All data serialized to a single portable JSON file — no database, no accounts
+- All data serialized to a single portable JSON file
 - Polymorphic serialization via `[JsonDerivedType]` handles `StarResponse` and `FreeformResponse` subtypes correctly on round-trip
-- **Auto-save** to server temp folder on every response save
+- **Auto-save** to temp folder on every response save
 - Restore prompt on app load if an unsaved session is detected
 - Last exported timestamp shown in nav; "Not yet exported" warning in amber
 
@@ -44,12 +44,11 @@ Interview prep is easy to misjudge — you "feel" ready until you freeze or ramb
 
 | Layer | Choice |
 |---|---|
-| Framework | .NET 8 Blazor Server |
+| Framework | .NET 10 Blazor Server |
 | Language | C# |
-| Serialization | System.Text.Json with `JsonStringEnumConverter` and `[JsonDerivedType]` |
+| Serialization | System.Text.Json 
 | State | In-memory singleton services (`InterviewService`, `SessionService`, `RubricService`) |
 | Seed data | JSON files loaded at startup (`Behavioral.json`, `CSharp_technical.json`, `CSharp_coding.json`) |
-| Styling | Inline styles — no CSS framework dependency |
 
 ---
 

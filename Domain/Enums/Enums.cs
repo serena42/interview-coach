@@ -31,7 +31,8 @@
         Behavioral,
         Situational,
         Narrative,
-        Technical, Coding,
+        Technical, 
+        Coding,
     }
 
     public enum SourceType

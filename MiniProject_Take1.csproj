@@ -8,11 +8,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Components\Star\" />
-    <Folder Include="Domain\Resume\" />
-    <Folder Include="Infrastructure\ImportExport\" />
-    <Folder Include="Infrastructure\GitHubAnalysis\" />
-    <Folder Include="Infrastructure\Star\" />
+    <Compile Remove="Components\Star\**" />
+    <Content Remove="Components\Star\**" />
+    <EmbeddedResource Remove="Components\Star\**" />
+    <None Remove="Components\Star\**" />
   </ItemGroup>
 
 </Project>

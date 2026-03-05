@@ -4,7 +4,7 @@ using System.Text.Json.Serialization;
 namespace MiniProject_Take1.Domain.Interview
 {
     //serialization is converting an object into memory, deserialization is reading it back into an object
-    [JsonDerivedType(typeof(StarResponse), typeDiscriminator: "star")] //fixes polymorphic serialization
+    [JsonDerivedType(typeof(StarResponse), typeDiscriminator: "star")] //fixes "polymorphic serialization"
     [JsonDerivedType(typeof(FreeformResponse), typeDiscriminator: "freeform")] // which is when a serializer doesn't know about the derived classes
     public class InterviewResponse
     {

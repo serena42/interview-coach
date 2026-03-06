@@ -3,6 +3,12 @@
 
 ---
 
+## Project Status
+
+Development frozen, will be re-organized for the final project which will be based on .NET MAUI. 
+
+---
+
 ## What It Does
 
 Interview prep is easy to misjudge — you think you're ready until you freeze or ramble in the moment. This app gives structure, repetition, and visibility into your actual progress across behavioral, narrative, and technical question types.
@@ -60,17 +66,6 @@ Interview prep is easy to misjudge — you think you're ready until you freeze o
 
 ---
 
-## Project Status
 
-Actively in development as part of MSSA-CAD cohort Week 8/17 mini-project.
 
-### Completed
-- Behavioral and Narrative practice with STAR wizard and scoring
-- Kanban dashboard with smart recommendations
-- Technical and Coding spaced repetition review
-- Session export/import with auto-save and restore
 
-### Planned
-- `Coding.razor` — syntax and implementation practice page
-- `Interview.razor` — full mock interview simulator
-- Challenge mode — timed mixed practice sessions
